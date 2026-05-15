@@ -19,23 +19,21 @@
 html, body {
     margin: 0 !important;
     padding: 0 !important;
-    width: 100%;
-    height: 100%;
+    min-height: 100vh; /* EL PARCHE DEL FOOTER: Altura mínima = 100% de tu monitor */
     overflow-x: hidden;
     background-color: var(--color-void);
     color: var(--color-ash);
     font-family: var(--font-terminal);
-    display: flex;
-    flex-direction: column; /* Permite que el footer baje al fondo */
+    display: flex; /* Esto junto con el flex: 1 del main empuja el footer al fondo */
+    flex-direction: column;
 }
 
 /* =========================================
    TOPBAR TÁCTICA (MENÚ) - MODO DARK NEÓN
    ========================================= */
 .topbar-tactica {
-    width: 100vw; 
     height: 70px;
-    background-color: var(--color-void); /* Fondo negro absoluto del menú */
+    background-color: var(--color-void);
     display: flex;
     align-items: center; 
     justify-content: flex-start; 

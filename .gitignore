@@ -1,0 +1,9 @@
+# Dependencias de Node.js (El agujero negro)
+node_modules/
+
+# Archivos de entorno y secretos tácticos
+.env
+
+# Logs y basura del sistema (Opcional pero recomendado)
+npm-debug.log
+.DS_Store
