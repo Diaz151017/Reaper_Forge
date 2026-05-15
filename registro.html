@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="ReaperForge: Digital Forensics Frontier. Entorno de entrenamiento DFIR.">
     <meta name="author" content="[T] Adrián Díaz García">
-    <title>Inicio - ReaperForge</title>
+    <title>Inicia sesión/Alta de Agente - ReaperForge</title>
 
     <link rel="stylesheet" href="css/estilos.css?v=2.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -16,28 +16,43 @@
         <img src="img/Reaper_Forge_Menu.png" alt="Logo de ReaperForge" class="nav-logo">
 
         <div class="nav-links">
-            <a href="index.html" class="active">Inicio</a>
+            <a href="index.html">Inicio</a>
             <a href="herencia.html">Origen de la Fragua</a>
             <a href="laboratorio.html">El Laboratorio</a>
             <a href="archivos.html">Archivos</a>
         </div>
 
         <div class="nav-auth">
-            <a href="registro.html" class="boton-acceso">Inicio de sesión/Alta de Agente</a>
+            <a href="registro.html" class="boton-acceso active">Inicio de sesión/Alta de Agente</a>
         </div>
     </nav>
 
     <main class="contenedor-consola">
         <section class="hero-tactico">
-            <img src="img/Reaper_Forge.png" alt="Emblema ReaperForge" class="logo-central">
-            
             <div class="terminal-intro">
-                <h1>Bienvenido a la Fragua.</h1>
-                <p>En el mundo real, los sistemas caen. El código perfecto falla. Y cuando eso ocurre, todo el mundo entra en pánico menos nosotros. Nosotros somos el <strong>Blue Team</strong>.</p>
-                <p>Nuestra misión no es evitar que el servidor sangre; nuestra misión es analizar la sangre para encontrar al atacante. Deja de leer texto y empieza a buscar huellas.</p>
+                <h1>Alta de Nuevo Agente</h1>
+                <p>Introduce tus credenciales para solicitar acceso nivel 1 a la Fragua.</p>
+                
+                <form id="registro-form" class="formulario-tactico" action="/api/registro" method="POST">
+                    <div class="grupo-input">
+                        <label for="username">Identificador (Username)</label>
+                        <input type="text" id="username" name="username" placeholder="Ej: Agente_007" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="email">Canal de Comunicación (Email)</label>
+                        <input type="email" id="email" name="email" placeholder="correo@dominio.com" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="password">Clave de Encriptación (Password)</label>
+                        <input type="password" id="password" name="password" placeholder="********" required>
+                    </div>
+
+                    <button type="submit" class="boton-iniciar">FORJAR CREDENCIALES</button>
+                </form>
+
             </div>
-            
-            <a href="herencia.html" class="boton-iniciar">INICIAR PROTOCOLO</a>
         </section>
     </main>
     
