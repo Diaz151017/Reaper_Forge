@@ -1,28 +1,90 @@
 // /backend/server.js
-require('dotenv').config(); // Cargamos los secretos de la bóveda
+// /backend/server.js
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const pool = require('./db'); // Invocamos la conexión a MySQL que creaste antes
+const bcrypt = require('bcrypt');
+const pool = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middlewares (Los protocolos de seguridad básica)
-app.use(cors()); // Permite que tu HTML se comunique con este servidor sin bloqueos
-app.use(express.json()); // Instruye al servidor para que sepa leer datos en formato JSON
+// Middlewares
+app.use(cors());
+app.use(express.json());
 
-// Ruta de diagnóstico
-app.get('/api/status', (req, res) => {
-    res.json({ 
-        estado: 'Operativo', 
-        mensaje: 'Servidor de la Fragua en línea. Blue Team a la espera.' 
-    });
+// =========================================
+// PROTOCOLO DE REGISTRO (Alta de Agentes)
+// =========================================
+app.post('/api/registro', async (req, res) => {
+    const { username, email, password } = req.body;
+
+    try {
+        // 1. Verificación de integridad: ¿Faltan datos?
+        if (!username || !email || !password) {
+            return res.status(400).json({ error: 'Faltan datos para completar el alta.' });
+        }
+
+        // 2. Blindaje de contraseña: Hash con Bcrypt
+        // Generamos un hash con un factor de coste de 10
+        const saltRounds = 10;
+        const passwordHash = await bcrypt.hash(password, saltRounds);
+
+        // 3. Inserción en la base de datos
+        const query = 'INSERT INTO agentes (username, email, password_hash) VALUES (?, ?, ?)';
+        await pool.query(query, [username, email, passwordHash]);
+
+        console.log(`[+] Nuevo agente forjado: ${username}`);
+        res.status(201).json({ mensaje: 'Agente registrado con éxito. Protocolo de alta completado.' });
+
+    } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({ error: 'El identificador o email ya están en uso por otro agente.' });
+        }
+        console.error('[-] Error en registro:', err);
+        res.status(500).json({ error: 'Error interno en la Fragua al procesar el alta.' });
+    }
 });
 
-// Secuencia de ignición
+// =========================================
+// PROTOCOLO DE ACCESO (Identificación)
+// =========================================
+app.post('/api/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        // 1. Localizar al agente
+        const [rows] = await pool.query('SELECT * FROM agentes WHERE username = ?', [username]);
+        
+        if (rows.length === 0) {
+            return res.status(401).json({ error: 'Identificación fallida. Credenciales no reconocidas.' });
+        }
+
+        const agente = rows[0];
+
+        // 2. Confrontación de claves (Password vs Hash)
+        const match = await bcrypt.compare(password, agente.password_hash);
+
+        if (!match) {
+            return res.status(401).json({ error: 'Identificación fallida. Credenciales no reconocidas.' });
+        }
+
+        // 3. Acceso concedido
+        console.log(`[!] Acceso autorizado para: ${username} (Nivel ${agente.clearance_level})`);
+        res.json({ 
+            mensaje: `Bienvenido de nuevo, agente ${username}.`,
+            user: { username: agente.username, level: agente.clearance_level }
+        });
+
+    } catch (err) {
+        console.error('[-] Error en login:', err);
+        res.status(500).json({ error: 'Error en el sistema de identificación.' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`\n=================================================`);
-    console.log(`[+] Módulo Express iniciado en el puerto ${PORT}`);
-    console.log(`[+] Esperando confirmación de la base de datos...`);
+    console.log(`[+] Núcleo de ReaperForge operativo en puerto ${PORT}`);
+    console.log(`[+] Rutas de /api/registro y /api/login armadas.`);
     console.log(`=================================================\n`);
 });

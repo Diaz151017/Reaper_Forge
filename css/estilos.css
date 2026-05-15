@@ -301,3 +301,30 @@ html, body {
     cursor: pointer;
     background-color: var(--color-panel); /* Igualamos al fondo para que destaque el borde */
 }
+
+/* =========================================
+   PANTALLA DIVIDIDA DE AUTENTICACIÓN
+   ========================================= */
+.hero-auth {
+    width: 100%;
+    max-width: 1000px; /* Hacemos el contenedor más ancho para que quepan ambos paneles */
+    margin: 0 auto;
+}
+
+.paneles-auth {
+    display: flex;
+    gap: 40px; /* Separación entre el login y el registro */
+    align-items: flex-start; /* Evita que un panel se estire si el otro es más largo */
+}
+
+.paneles-auth .terminal-intro {
+    flex: 1; /* Ambos paneles ocupan exactamente el 50% del espacio */
+    margin-bottom: 0; 
+}
+
+/* Protocolo de Responsividad: Si la pantalla es pequeña, se apilan */
+@media (max-width: 850px) {
+    .paneles-auth {
+        flex-direction: column;
+    }
+}
