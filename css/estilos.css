@@ -1,0 +1,202 @@
+/* =========================================
+   VARIABLES TÁCTICAS Y RESETEO
+   ========================================= */
+:root {
+    --color-void: #050505;        /* Negro profundo de terminal */
+    --color-cyan: #00e5ff;        /* Cian neón Blue Team */
+    --color-cyan-dark: #008b99;   /* Cian oscurecido para hovers */
+    --color-ash: #E0E0E0;         /* Gris ceniza para texto principal */
+    --color-panel: #111111;       /* Gris muy oscuro para cajas y terminales */
+    --font-terminal: 'Consolas', 'Courier New', monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: var(--color-void);
+    color: var(--color-ash);
+    font-family: var(--font-terminal);
+    display: flex;
+    flex-direction: column; /* Permite que el footer baje al fondo */
+}
+
+/* =========================================
+   TOPBAR TÁCTICA (MENÚ) - MODO DARK NEÓN
+   ========================================= */
+.topbar-tactica {
+    width: 100vw; 
+    height: 70px;
+    background-color: var(--color-void); /* Fondo negro absoluto del menú */
+    display: flex;
+    align-items: center; 
+    justify-content: flex-start; 
+    padding: 0 20px;
+    border-bottom: 2px solid var(--color-cyan); /* Línea de contención cian inferior */
+    box-shadow: 0 4px 20px rgba(0, 229, 255, 0.15); /* Resplandor sutil bajo la barra */
+}
+
+/* Control estricto sobre la imagen del logo dentro del menú */
+.nav-logo {
+    height: 50px !important;      
+    width: auto !important;       
+    max-width: 150px !important;  
+    margin-right: 40px !important;
+    display: block !important;
+    filter: drop-shadow(0px 0px 15px rgba(0, 229, 255, 0.4)); /* Resplandor cian */    
+}
+
+/* Contenedor de los enlaces */
+.nav-links {
+    display: flex;
+    gap: 20px; /* Separación ajustada para que los marcos respiren */
+}
+
+/* Estilo de los botones del menú (Heredando el estilo táctico) */
+.nav-links a {
+    background-color: transparent; /* Iniciando en negro/transparente */
+    color: var(--color-cyan); /* Letras cian */
+    border: 2px solid var(--color-cyan); /* Marco cian */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 8px 18px;
+    border-radius: 4px;
+    text-transform: uppercase; /* Toque de terminal de comandos */
+    letter-spacing: 1px;
+    transition: all 0.3s ease; /* Transición fluida para el efecto hover */
+}
+
+/* Efecto al pasar el ratón (Destello y Contraste) */
+.nav-links a:hover, 
+.nav-links a.active {
+    background-color: var(--color-cyan); /* El fondo se llena de cian */
+    color: var(--color-void); /* El texto pasa a negro para contrastar */
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.6); /* Efecto de resplandor neón */
+}
+
+/* =========================================
+   CONTENEDOR PRINCIPAL Y HERO
+   ========================================= */
+.contenedor-consola {
+    flex: 1; /* Ocupa todo el espacio restante empujando el footer abajo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.hero-tactico {
+    text-align: center;
+    max-width: 800px;
+}
+
+.logo-central {
+    max-width: 300px; /* Tamaño controlado para el logo grande */
+    height: auto;
+    margin-bottom: 30px;
+    filter: drop-shadow(0px 0px 15px rgba(0, 229, 255, 0.4)); /* Resplandor cian */
+}
+
+.terminal-intro {
+    background-color: var(--color-panel);
+    border-left: 4px solid var(--color-cyan);
+    padding: 30px;
+    border-radius: 4px;
+    margin-bottom: 40px;
+    text-align: left;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.terminal-intro h1 {
+    color: var(--color-cyan);
+    font-size: 2rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.terminal-intro p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.terminal-intro p strong {
+    color: var(--color-cyan);
+}
+
+/* =========================================
+   BOTONES Y LLAMADAS A LA ACCIÓN
+   ========================================= */
+.boton-iniciar {
+    display: inline-block;
+    background-color: transparent;
+    color: var(--color-cyan);
+    border: 2px solid var(--color-cyan);
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.boton-iniciar:hover {
+    background-color: var(--color-cyan);
+    color: var(--color-void);
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
+}
+
+/* =========================================
+   PIE DE PÁGINA (FOOTER TÁCTICO)
+   ========================================= */
+.footer-tactico {
+    background-color: var(--color-panel);
+    border-top: 1px solid rgba(0, 229, 255, 0.2);
+    padding: 20px 0;
+    width: 100%;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 0.9rem;
+}
+
+.lema {
+    color: var(--color-cyan);
+    font-style: italic;
+    margin-top: 5px;
+    display: block;
+}
+
+.footer-links a {
+    color: var(--color-ash);
+    text-decoration: none;
+    margin-left: 20px;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--color-cyan);
+}
+
+.footer-social a {
+    color: var(--color-ash);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
