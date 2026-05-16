@@ -63,8 +63,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (response.ok) {
                     alert(`[!] ACCESO CONCEDIDO: ${data.mensaje}`);
-                    // NOTA TÁCTICA: Aquí redirigiremos al dashboard cuando lo construyamos
-                    // window.location.href = 'laboratorio.html'; 
+    
+                    // Grabamos los datos del agente en la memoria persistente del navegador
+                    localStorage.setItem('agente_sesion', JSON.stringify(data.user));
+    
+                    // Forzamos el salto hiperespacial al Laboratorio
+                    window.location.href = 'laboratorio.html'; 
                 } else {
                     alert(`[-] ACCESO DENEGADO: ${data.error}`);
                 }

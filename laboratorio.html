@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ReaperForge: Laboratorio de Operaciones Especiales DFIR.">
+    <meta name="author" content="[T] Adrián Díaz García">
+    <title>El Laboratorio - ReaperForge</title>
+
+    <link rel="stylesheet" href="css/estilos.css?v=2.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="topbar-tactica">
+        <img src="img/Reaper_Forge_Menu.png" alt="Logo de ReaperForge" class="nav-logo">
+
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="herencia.html">Origen de la Fragua</a>
+            <a href="laboratorio.html" class="active">El Laboratorio</a>
+            <a href="archivos.html">Archivos</a>
+        </div>
+
+        <div class="nav-auth">
+            <a href="registro.html" class="boton-acceso">Inicio de sesión/Alta de Agente</a>
+        </div>
+    </nav>
+
+    <main class="contenedor-consola">
+        <section class="hero-tactico">
+            <div class="consola-interfaz">
+                <div class="terminal-header">
+                    <span class="terminal-title">REAPERFORGE // SECTOR_01 // PANEL DE AGENTE</span>
+                    <div class="terminal-dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                </div>
+
+                <div class="terminal-body">
+                    <h2>Bienvenido al Laboratorio, <span id="perfil-nombre" style="color: var(--color-cyan);">[IDENTIFICANDO...]</span></h2>
+                    <p class="subtitulo-tactico" style="margin-top: 5px; color: #64748b;">// Estado de la terminal: <span style="color: #00ff22; font-weight: bold;">EN LÍNEA</span></p>
+                    
+                    <div class="grid-perfil" style="display: flex; gap: 30px; margin-top: 25px; text-align: left;">
+                        
+                        <div class="tarjeta-info" style="background: var(--color-panel); border: 1px solid #222; padding: 20px; flex: 1; border-radius: 4px;">
+                            <h3 style="color: var(--color-cyan); margin-bottom: 15px;"><i class="fas fa-shield-alt"></i> Credenciales de Seguridad</h3>
+                            <p style="margin-bottom: 8px;">Firma Digital: <span id="info-id" style="color: var(--color-ash);">--</span></p>
+                            <p>Rango Operativo: <span id="info-clearance" style="color: #ff9100; font-weight: bold;">--</span></p>
+                        </div>
+                        
+                        <div class="tarjeta-info" style="background: var(--color-panel); border: 1px solid #222; padding: 20px; flex: 1; border-radius: 4px;">
+                            <h3 style="color: var(--color-cyan); margin-bottom: 15px;"><i class="fas fa-terminal"></i> Telemetría de la Fragua</h3>
+                            <pre style="background: #050505; color: #00ff22; padding: 12px; font-size: 0.85rem; border-radius: 4px; border: 1px solid #151515; font-family: var(--font-terminal);">
+[+] Núcleo Express: ESCUCHANDO
+[+] Pasarela Pool: CONECTADA
+[+] Cripto-Módulo: SEGURO</pre>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-tactico">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <p>&copy; 2026 Desarrollado por <strong>Adrián Díaz García</strong>. <br> <span class=\"lema\">// El código permanece [T]</span></p>
+            </div>
+            
+            <div class="footer-links">
+                <a href="#">Aviso Legal</a>
+                <a href="#">Política de Cookies</a>
+                <a href="#">Términos</a>
+                <a href="#">Protocolos de Seguridad</a>
+                <a href="#">Clearance Level</a>
+            </div>
+            
+            <div class="footer-social">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram\"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter\"></i></a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sesion = localStorage.getItem('agente_sesion');
+            
+            // Contramedida: Si alguien intenta entrar a esta URL sin loguearse...
+            if (!sesion) {
+                alert('[-] ACCESO DENEGADO. Identifíquese primero.');
+                window.location.href = 'registro.html';
+                return;
+            }
+
+            const agente = JSON.parse(sesion);
+            
+            // Inyectamos los datos en la interfaz
+            document.getElementById('perfil-nombre').textContent = agente.username;
+            document.getElementById('info-id').textContent = `@${agente.username.toLowerCase()}`;
+            document.getElementById('info-clearance').textContent = `Nivel ${agente.level || 1}`;
+        });
+    </script>
+    <script src="js/auth.js"></script>
+    <script src="js/global.js"></script>
+</body>
+</html>
