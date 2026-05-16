@@ -1,15 +1,14 @@
 // /backend/server.js
-// /backend/server.js
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const pool = require('./db');
+const pool = require('./db'); // Importamos el pool de arriba
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middlewares
+// Middlewares: Filtros obligatorios de interceptación
 app.use(cors());
 app.use(express.json());
 
@@ -20,7 +19,7 @@ app.post('/api/registro', async (req, res) => {
     const { username, email, password } = req.body;
 
     try {
-        // 1. Verificación de integridad: ¿Faltan datos?
+        // 1. Verificación de integridad estructural: ¿Faltan datos?
         if (!username || !email || !password) {
             return res.status(400).json({ error: 'Faltan datos para completar el alta.' });
         }
@@ -30,7 +29,7 @@ app.post('/api/registro', async (req, res) => {
         const saltRounds = 10;
         const passwordHash = await bcrypt.hash(password, saltRounds);
 
-        // 3. Inserción en la base de datos
+        // 3. Inserción parametrizada anti-Inyección SQL
         const query = 'INSERT INTO agentes (username, email, password_hash) VALUES (?, ?, ?)';
         await pool.query(query, [username, email, passwordHash]);
 
