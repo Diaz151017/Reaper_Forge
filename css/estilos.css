@@ -299,7 +299,24 @@ html, body {
 .formulario-tactico .boton-iniciar {
     margin-top: 10px;
     cursor: pointer;
-    background-color: var(--color-panel); /* Igualamos al fondo para que destaque el borde */
+    background-color: transparent; /* Igualamos al fondo para que destaque el borde */
+    color: var(--color-cyan);
+    border: 2px solid var(--color-cyan); /* Borde punteado para diferenciarlo de los enlaces estándar */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 8px 18px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.formulario-tactico .boton-iniciar:hover,
+.formulario-tactico .boton-iniciar:active {
+    background-color: var(--color-cyan);
+    color: var(--color-void);
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
 }
 
 /* =========================================
@@ -327,4 +344,39 @@ html, body {
     .paneles-auth {
         flex-direction: column;
     }
+}
+
+/* =================================================
+   ELEMENTOS DINÁMICOS DEL MENÚ (LOGGED IN)
+   ================================================= */
+.perfil-menu-contenedor {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.agente-tag {
+    color: var(--color-cyan);
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Estado normal del botón */
+.boton-logout {
+    background: transparent;
+    border: 1px solid #ff3d3d;
+    color: #ff3d3d;
+    padding: 6px 12px;
+    font-family: var(--font-terminal);
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Esta línea hace que el cambio de color sea suave y no brusco */
+}
+
+/* Estado ALERTA (Hover) del botón */
+.boton-logout:hover {
+    background-color: #ff3d3d;
+    color: var(--color-void); /* El color oscuro del fondo de tu web */
+    box-shadow: 0 0 10px rgba(255, 61, 61, 0.6); /* Brillo de neón rojo */
 }

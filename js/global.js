@@ -6,13 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Si hay una sesión activa en la memoria del navegador...
     if (sesionActiva && navAuth) {
         const agente = JSON.parse(sesionActiva);
-        
+      
         // Mutamos el HTML del botón de Login por el nombre del agente y el botón de Salir
         navAuth.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <span style="color: var(--color-cyan); font-weight: bold; letter-spacing: 1px;">[T] ${agente.username}</span>
-                <button id="btn-logout" style="background: transparent; border: 1px solid #ff3d3d; 
-                color: #ff3d3d; padding: 6px 12px; font-family: var(--font-terminal); font-weight: bold; border-radius: 4px; cursor: pointer;">DESCONECTAR</button>
+            <div class="perfil-menu-contenedor">
+                <span class="agente-tag"> ${agente.username}</span>
+                <button id="btn-logout" class="boton-logout">DESCONECTAR</button>
             </div>
         `;
 
