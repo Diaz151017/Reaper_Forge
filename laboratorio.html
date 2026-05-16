@@ -60,34 +60,23 @@
                             </pre>
                         </div>
                     </div>
-
-                    <div class="tarjeta-info" style="background: var(--color-panel); border: 1px solid #222; padding: 20px; border-radius: 4px; margin-top: 25px;">
-                            <h3 style="color: var(--color-cyan); margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;">
-                                <i class="fas fa-folder-open"></i> Registro de Operaciones (DFIR)
-                            </h3>
-                            
-                            <div style="display: flex; justify-content: space-around; text-align: center; margin-bottom: 25px; font-family: var(--font-terminal);">
-                                <div>
-                                    <span style="color: #00ff22; font-size: 2rem; font-weight: bold; text-shadow: 0 0 10px rgba(0, 255, 34, 0.4);">12</span><br>
-                                    <span style="font-size: 0.8rem; color: var(--color-ash); letter-spacing: 1px;">AMENAZAS PURGADAS</span>
-                                </div>
-                                <div>
-                                    <span style="color: #ff9100; font-size: 2rem; font-weight: bold; text-shadow: 0 0 10px rgba(255, 145, 0, 0.4);">01</span><br>
-                                    <span style="font-size: 0.8rem; color: var(--color-ash); letter-spacing: 1px;">INCIDENTES EN CURSO</span>
-                                </div>
-                                <div>
-                                    <span style="color: #ff3d3d; font-size: 2rem; font-weight: bold; text-shadow: 0 0 10px rgba(255, 61, 61, 0.4);">00</span><br>
-                                    <span style="font-size: 0.8rem; color: var(--color-ash); letter-spacing: 1px;">SISTEMAS COMPROMETIDOS</span>
-                                </div>
-                            </div>
-
-                            <div class="formulario-tactico">
-                                <a href="archivos.html" style="display: block; text-align: center; background-color: transparent; color: var(--color-cyan); border: 2px solid var(--color-cyan); text-decoration: none; font-weight: bold; font-size: 1rem; padding: 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; cursor: pointer;">
-                                    ACCEDER A LA BASE DE DATOS DE INCIDENTES
-                                </a>
-                            </div>
+                    <div class="tarjeta-info modulo-metricas">
+                        <h3><i class="fas fa-folder-open"></i> Registro de Operaciones (DFIR)</h3>
+    
+                    <div class="contenedor-contadores">
+                        <div class="contador-item">
+                            <span id="meta-purgados" class="numero-metrica purgado">0</span><br>
+                            <span class="etiqueta-metrica">AMENAZAS PURGADAS</span>
                         </div>
-
+                        <div class="contador-item">
+                            <span id="meta-encurso" class="numero-metrica en-curso">0</span><br>
+                            <span class="etiqueta-metrica">INCIDENTES EN CURSO</span>
+                        </div>
+                        <div class="contador-item">
+                            <span id="meta-criticos" class="numero-metrica comprometido">0</span><br>
+                            <span class="etiqueta-metrica">SISTEMAS COMPROMETIDOS</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -116,13 +105,23 @@
     </footer>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const sesion = localStorage.getItem('agente_sesion');
-            
-            // Contramedida: Si alguien intenta entrar a esta URL sin loguearse...
-            if (!sesion) {
-                alert('[-] ACCESO DENEGADO. Identifíquese primero.');
-                window.location.href = 'registro.html';
-                return;
+            const txtPurgados = document.getElementById('meta-purgados');
+            const txtEnCurso = document.getElementById('meta-encurso');
+            const txtCriticos = document.getElementById('meta-criticos');
+
+            try {
+                const response = await fetch('http://localhost:3000/api/incidentes/estadisticas');
+                const stats = await response.json();
+
+                if (response.ok) {
+                    if(txtPurgados) txtPurgados.textContent = stats.purgados || 0;
+                    if(txtEnCurso) txtEnCurso.textContent = stats.enCurso || 0;
+                    if(txtCriticos) txtCriticos.textContent = stats.comprometidos || 0;
+                }
+            } catch (err) {
+                console.error('[-] Error al sincronizar el panel táctico:', err);
+                const alertas = [txtPurgados, txtEnCurso, txtCriticos];
+                alertas.forEach(el => { if(el) { el.textContent = '??'; el.style.color = '#ff3d3d'; }});
             }
 
             const agente = JSON.parse(sesion);
@@ -131,6 +130,34 @@
             document.getElementById('perfil-nombre').textContent = agente.username;
             document.getElementById('info-id').textContent = `@${agente.username.toLowerCase()}`;
             document.getElementById('info-clearance').textContent = `Nivel ${agente.level || 1}`;
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Localizamos las posiciones en el panel
+            const txtTotal = document.getElementById('meta-total');
+            const txtPurgados = document.getElementById('meta-purgados');
+            const txtEnCurso = document.getElementById('meta-encurso');
+            const txtCriticos = document.getElementById('meta-criticos');
+
+            try {
+                // Consultamos las estadísticas reales al backend
+                const response = await fetch('http://localhost:3000/api/incidentes/estadisticas');
+                const stats = await response.json();
+
+                // Si el servidor responde correctamente, actualizamos el DOM
+                if (response.ok) {
+                    txtTotal.textContent = stats.total || 0;
+                    txtPurgados.textContent = stats.purgados || 0;
+                    txtEnCurso.textContent = stats.enCurso || 0;
+                    txtCriticos.textContent = stats.comprometidos || 0;
+                }
+            } catch (err) {
+                console.error('[-] Error al sincronizar el panel táctico:', err);
+                // Si falla, dejamos un indicador visual de anomalía
+                const alertas = [txtTotal, txtPurgados, txtEnCurso, txtCriticos];
+                alertas.forEach(el => { if(el) el.textContent = '??'; el.style.color = '#ff3d3d'; });
+            }
         });
     </script>
     <script src="js/auth.js"></script>

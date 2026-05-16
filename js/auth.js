@@ -64,8 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok) {
                     alert(`[!] ACCESO CONCEDIDO: ${data.mensaje}`);
     
-                    // Grabamos los datos del agente en la memoria persistente del navegador
+                    // Grabamos los datos completos del agente en la memoria persistente
                     localStorage.setItem('agente_sesion', JSON.stringify(data.user));
+                    
+                    // [NUEVO] Extraemos y grabamos el Nivel de Clearance explícitamente.
+                    // Usamos un OR lógico por si en la base de datos la columna se llama clearance_level o level.
+                    const clearance = data.user.clearance_level || data.user.level || 1;
+                    localStorage.setItem('agente_level', clearance);
     
                     // Forzamos el salto hiperespacial al Laboratorio
                     window.location.href = 'laboratorio.html'; 

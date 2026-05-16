@@ -107,3 +107,27 @@ app.get('/api/incidentes', async (req, res) => {
         res.status(500).json({ error: 'Fallo de conexión con el núcleo de datos' });
     }
 });
+
+// =================================================
+// RUTA API: METRICAS EN TIEMPO REAL PARA EL LAB
+// =================================================
+app.get('/api/incidentes/estadisticas', async (req, res) => {
+    // Una sola consulta calcula el total y desglosa el semáforo
+    const query = `
+        SELECT 
+            COUNT(*) as total,
+            SUM(CASE WHEN estado = 'purgado' THEN 1 ELSE 0 END) as purgados,
+            SUM(CASE WHEN estado = 'en-curso' THEN 1 ELSE 0 END) as enCurso,
+            SUM(CASE WHEN estado = 'comprometido' THEN 1 ELSE 0 END) as comprometidos
+        FROM incidentes
+    `;
+    
+    try {
+        const [results] = await pool.query(query);
+        // Devolvemos el primer (y único) registro del array
+        res.json(results[0]);
+    } catch (error) {
+        console.error('[-] Error en la matriz de estadísticas:', error);
+        res.status(500).json({ error: 'Fallo de telemetría en el núcleo' });
+    }
+});
