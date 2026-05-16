@@ -37,7 +37,7 @@
                 <p>Nuestra misión no es evitar que el servidor sangre; nuestra misión es analizar la sangre para encontrar al atacante. Deja de leer texto y empieza a buscar huellas.</p>
             </div>
             
-            <a href="registro.html" class="boton-iniciar">INICIAR PROTOCOLO</a>
+            <a href="registro.html" class="boton-iniciar" id="btn-protocolo">INICIAR PROTOCOLO</a>
         </section>
     </main>
     
@@ -62,6 +62,21 @@
             </div>
         </div>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnProtocolo = document.getElementById('btn-protocolo');
+            const sesionActiva = localStorage.getItem('agente_sesion');
+            
+            // Si el sensor detecta una credencial viva en la memoria...
+            if (sesionActiva && btnProtocolo) {
+                // Alteramos el destino del enlace en tiempo de ejecución
+                btnProtocolo.href = 'laboratorio.html';
+                
+                // Opcional: Puedes cambiar sutilmente el texto para indicar que reanuda la sesión
+                btnProtocolo.textContent = 'REANUDAR PROTOCOLO';
+            }
+        });
+    </script>
     <script src="js/auth.js"></script>
     <script src="js/global.js"></script>
 </body>
