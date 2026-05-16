@@ -87,3 +87,23 @@ app.listen(PORT, () => {
     console.log(`[+] Rutas de /api/registro y /api/login armadas.`);
     console.log(`=================================================\n`);
 });
+
+// =================================================
+// RUTA API: OBTENER EXPEDIENTES DFIR (VERSIÓN ASÍNCRONA)
+// =================================================
+app.get('/api/incidentes', async (req, res) => {
+    const query = 'SELECT * FROM incidentes ORDER BY nivel_requerido ASC, fecha_registro DESC';
+    
+    try {
+        // En mysql2 con promesas, la consulta devuelve un array doble. 
+        // [results] extrae directamente los datos y descarta los metadatos de las columnas.
+        const [results] = await pool.query(query);
+        
+        // Enviamos los resultados al navegador
+        res.json(results);
+        
+    } catch (error) {
+        console.error('[-] Error extrayendo expedientes:', error);
+        res.status(500).json({ error: 'Fallo de conexión con el núcleo de datos' });
+    }
+});

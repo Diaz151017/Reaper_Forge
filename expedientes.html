@@ -44,57 +44,8 @@
                 </div>
             </div>
 
-            <div class="grid-expedientes">
-                
-                <div class="tarjeta-expediente estado-purgado">
-                    <div class="cabecera-expediente">
-                        <span class="case-id">CASE-1971-CREEPER</span>
-                        <span class="badge-status purgado">PURGADO</span>
-                    </div>
-                    <h3>Génesis del Gusano Autorreplicante</h3>
-                    <p class="descripcion-caso">Análisis forense del primer espécimen histórico en ARPANET. Mitigación mediante el protocolo experimental Reaper.</p>
-                    <div class="detalles-tecnicos">
-                        <span><strong>Vector:</strong> Código Autónomo</span>
-                        <span><strong>Impacto:</strong> Bajo (Informativo)</span>
-                    </div>
-                    <div class="formulario-tactico">
-                        <a href="herencia.html" class="boton-analizar">Revisar Autopsia</a>
-                    </div>
+            <div class="grid-expedientes" id="visor-expedientes">
                 </div>
-
-                <div class="tarjeta-expediente estado-en-curso">
-                    <div class="cabecera-expediente">
-                        <span class="case-id">CASE-2026-NEKROS</span>
-                        <span class="badge-status en-curso">EN CURSO</span>
-                    </div>
-                    <h3>Infiltración en Servidor de Supercomputación</h3>
-                    <p class="descripcion-caso">Detección de anomalías en la memoria RAM y persistencia mediante tareas programadas (cronjobs) sospechosas.</p>
-                    <div class="detalles-tecnicos">
-                        <span><strong>Vector:</strong> SSH Brute Force</span>
-                        <span><strong>Impacto:</strong> Alto (Exfiltración)</span>
-                    </div>
-                    <div class="formulario-tactico">
-                        <button class="boton-analizar-action">Iniciar Volcado de Memoria</button>
-                    </div>
-                </div>
-
-                <div class="tarjeta-expediente estado-comprometido">
-                    <div class="cabecera-expediente">
-                        <span class="case-id">CASE-XXXX-CROWSTATION</span>
-                        <span class="badge-status comprometido">CRÍTICO</span>
-                    </div>
-                    <h3>Secuestro Criptográfico de Estación de Datos</h3>
-                    <p class="descripcion-caso">Ataque masivo con cifrado de grado militar. Estructura de archivos corrupta con patrones que evocan un terror casi cósmico en los logs.</p>
-                    <div class="detalles-tecnicos">
-                        <span><strong>Vector:</strong> Desconocido</span>
-                        <span><strong>Impacto:</strong> Catastrófico</span>
-                    </div>
-                    <div class="formulario-tactico">
-                        <button class="boton-analizar-action" disabled style="opacity: 0.3; cursor: not-allowed;">ACCESO DENEGADO (REQ. NIVEL 99)</button>
-                    </div>
-                </div>
-
-            </div>
         </section>
     </main>
 
@@ -110,12 +61,88 @@
                 <a href="#">Protocolos de Seguridad</a>
             </div>
             <div class="footer-social">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
                 <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
             </div>
         </div>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const visor = document.getElementById('visor-expedientes');
+    
+            // 1. Recuperamos el nivel del agente desde la memoria del navegador
+            // Si no hay sesión, asumimos nivel 0 (visitante)
+            const nivelAgente = parseInt(localStorage.getItem('agente_level')) || 0;
+    
+            visor.innerHTML = '<p style="color: var(--color-cyan); font-family: var(--font-terminal);">[+] Estableciendo conexión segura...</p>';
 
+            try {
+                const respuesta = await fetch('http://localhost:3000/api/incidentes'); 
+                const incidentes = await respuesta.json();
+
+                visor.innerHTML = '';
+
+                incidentes.forEach(incidente => {
+                    let claseEstado = '';
+                    let badgeHTML = '';
+                    let botonHTML = '';
+
+                    // 2. Evaluamos si el agente tiene la autorización necesaria para este caso
+                    const tieneAcceso = nivelAgente >= incidente.nivel_requerido;
+
+                    if (incidente.estado === 'purgado') {
+                        claseEstado = 'estado-purgado';
+                        badgeHTML = '<span class="badge-status purgado">PURGADO</span>';
+                        botonHTML = '<a href="autopsia.html?id=1" class="boton-analizar">Revisar Autopsia</a>';
+                    } 
+                    else if (incidente.estado === 'en-curso') {
+                        claseEstado = 'estado-en-curso';
+                        badgeHTML = '<span class="badge-status en-curso">EN CURSO</span>';
+                        botonHTML = '<button class="boton-analizar-action">Iniciar Volcado de Memoria</button>';
+                    } 
+                    else if (incidente.estado === 'comprometido') {
+                        claseEstado = 'estado-comprometido';
+                        badgeHTML = '<span class="badge-status comprometido">CRÍTICO</span>';
+                
+                        // 3. Bloqueo dinámico basado en el nivel real del agente
+                        if (tieneAcceso) {
+                            botonHTML = '<button class="boton-analizar-action">ACCEDER AL INCIDENTE</button>';
+                        } else {
+                            claseEstado += ' caso-bloqueado'; // Clase opcional para oscurecer la tarjeta
+                            botonHTML = `<button class="boton-analizar-action" disabled style="opacity: 0.3; cursor: not-allowed;">ACCESO DENEGADO (REQ. NIVEL ${incidente.nivel_requerido})</button>`;
+                        }
+                    }
+
+                    // (El resto del código que genera la constante 'tarjeta' e inyecta en el visor permanece exactamente igual)
+                    const tarjeta = `
+                        <div class="tarjeta-expediente ${claseEstado}">
+                            <div class="cabecera-expediente">
+                                <span class="case-id">${incidente.case_id}</span>
+                                ${badgeHTML}
+                            </div>
+                            <h3>${incidente.titulo}</h3>
+                            <p class="descripcion-caso">${incidente.descripcion}</p>
+                            <div class="detalles-tecnicos">
+                                <span><strong>Vector:</strong> ${incidente.vector}</span>
+                                <span><strong>Impacto:</strong> ${incidente.impacto}</span>
+                            </div>
+                            <div class="formulario-tactico">
+                                ${botonHTML}
+                            </div>
+                        </div>
+                    `;
+                    visor.innerHTML += tarjeta;
+                });
+
+            } catch (error) {
+                console.error('[-] Fallo en el enlace de datos:', error);
+                visor.innerHTML = '<p style="color: #ff3d3d; font-family: var(--font-terminal);">[!] Error crítico de conexión.</p>';
+            }
+        });
+    </script>
+    <script src="js/auth.js"></script>
     <script src="js/global.js"></script>
 </body>
 </html>

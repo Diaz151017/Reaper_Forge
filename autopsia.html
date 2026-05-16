@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autopsia DFIR - CASE-1971-CREEPER</title>
+    <link rel="stylesheet" href="css/estilos.css?v=3.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="body-autopsia">
+
+    <nav class="topbar-tactica">
+        <div class="nav-links">
+            <a href="expedientes.html"><i class="fas fa-arrow-left"></i> Abortar y Volver a Expedientes</a>
+        </div>
+        <div class="nav-auth" style="color: var(--color-cyan); font-family: var(--font-terminal);">
+            <span>EXPEDIENTE: CASE-1971-CREEPER // ESTADO: AISLADO</span>
+        </div>
+    </nav>
+
+    <main class="contenedor-visor-dual">
+        
+        <section class="panel-forense" id="panel-logs">
+            <div class="cabecera-panel">
+                <h3><i class="fas fa-list"></i> TELEMETRÍA: ARPANET PDP-10 (1971)</h3>
+            </div>
+            <div class="contenido-codigo">
+<pre><code>[1971-03-14 02:14:01] SYS_INIT: TENEX OS BOOT SEQUENCE STARTED
+[1971-03-14 02:14:05] NET_BIND: BBN_IMP_INTERFACE_ACTIVE
+[1971-03-14 02:15:22] USR_LOGIN: ROOT_ACCESS_GRANTED_TTY1
+[1971-03-14 02:18:44] ANOMALY_DETECTED: UNAUTHORIZED_FILE_TRANSFER
+<span id="objetivo-creeper" class="linea-anomala">[1971-03-14 02:18:45] TTY_OUTPUT_OVERRIDE: I'M THE CREEPER: CATCH ME IF YOU CAN.</span>
+[1971-03-14 02:18:46] SYS_ALERT: UNAUTHORIZED_SELF_REPLICATION_INITIATED
+[1971-03-14 02:18:49] NET_OUTBOUND: CONNECTION_REQUEST_TO_NODE_4
+[1971-03-14 02:19:01] SYS_ERR: MEMORY_ALLOCATION_SPIKE</code></pre>
+            </div>
+        </section>
+
+        <section class="panel-forense" id="panel-mitigacion">
+            <div class="cabecera-panel">
+                <h3><i class="fas fa-code"></i> CONTRAMEDIDA: PROTOCOLO REAPER</h3>
+            </div>
+            <div class="contenido-codigo">
+<pre><code id="codigo-reaper" style="opacity: 0.3;">// INICIANDO COMPILACIÓN DE CONTRAMEDIDA...
+function deployReaper() {
+    const target = "CREEPER_PROCESS";
+    const nodes = ["NODE_1", "NODE_2", "NODE_3", "NODE_4"];
+    
+    nodes.forEach(node => {
+        console.log(`[+] Escaneando ${node}...`);
+        if (checkInfection(node, target)) {
+            executePurge(node, target);
+            console.log(`[!] Amenaza neutralizada en ${node}.`);
+        }
+    });
+    return "SISTEMA ESTABILIZADO";
+}</code></pre>
+            </div>
+            
+            <div class="controles-accion">
+                <p style="color: var(--color-ash); font-size: 0.9rem; margin-bottom: 15px;">Misión: Identifica la firma del gusano en los logs para habilitar la contramedida.</p>
+                <div class="formulario-tactico">
+                    <button id="btn-purgar" disabled style="width: 100%; opacity: 0.3; cursor: not-allowed;">DESPLEGAR REAPER</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Identificamos a los actores en el DOM
+            const anomalia = document.getElementById('objetivo-creeper');
+            const codigoReaper = document.getElementById('codigo-reaper');
+            const btnPurgar = document.getElementById('btn-purgar');
+
+            // 2. El Agente aísla la firma del malware (Evento Clic)
+            anomalia.addEventListener('click', () => {
+                
+                // Feedback visual: Marcamos la amenaza como "Fijada"
+                anomalia.style.backgroundColor = 'rgba(0, 229, 255, 0.2)';
+                anomalia.style.color = 'var(--color-cyan)';
+                anomalia.style.fontWeight = 'bold';
+                anomalia.textContent += ' // [!] FIRMA IDENTIFICADA Y AISLADA';
+
+                // Desbloqueamos el panel de código derecho
+                codigoReaper.style.opacity = '1';
+                codigoReaper.style.transition = 'opacity 1s ease';
+
+                // Armamos el arma principal (El botón)
+                btnPurgar.disabled = false;
+                btnPurgar.style.opacity = '1';
+                btnPurgar.style.cursor = 'pointer';
+                btnPurgar.style.backgroundColor = 'var(--color-cyan)';
+                btnPurgar.style.color = 'var(--color-void)';
+                btnPurgar.style.boxShadow = '0 0 15px rgba(0, 229, 255, 0.6)';
+                btnPurgar.textContent = 'EJECUTAR PROTOCOLO REAPER';
+            });
+
+            // 3. El Agente pulsa el gatillo
+            btnPurgar.addEventListener('click', () => {
+                // Aquí en el futuro podrías hacer un UPDATE en la base de datos para marcarlo como 'purgado'
+                // Por ahora, simulamos la purga y volvemos a la base
+                alert('>>> INICIANDO PURGA...\n[+] Nodos escaneados.\n[+] Espécimen Creeper eliminado de la memoria.\n\nSISTEMA ESTABILIZADO. Volviendo al Archivo Central.');
+                
+                // Redirección táctica
+                window.location.href = 'expedientes.html';
+            });
+        });
+    </script>
+</body>
+</html>

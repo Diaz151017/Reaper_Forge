@@ -563,3 +563,72 @@ html, body {
     color: var(--color-void);
     box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
 }
+
+/* =================================================
+   ENTORNO DE VISOR DUAL (AUTOPSIA SIDE-BY-SIDE)
+   ================================================= */
+.body-autopsia {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Evitamos scroll en la página principal */
+}
+
+.contenedor-visor-dual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 20px;
+    flex-grow: 1; /* Ocupa todo el espacio restante bajo el menú */
+    height: calc(100vh - 70px);
+}
+
+.panel-forense {
+    background-color: var(--color-panel);
+    border: 1px solid #333;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.cabecera-panel {
+    background-color: #111;
+    padding: 10px 15px;
+    border-bottom: 1px solid #333;
+}
+
+.cabecera-panel h3 {
+    color: var(--color-cyan);
+    font-family: var(--font-terminal);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.contenido-codigo {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto; /* Scroll interno solo para el código */
+    background-color: var(--color-void);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    color: #a0a0a0;
+    line-height: 1.5;
+}
+
+/* Efecto para cuando el usuario seleccione la anomalía */
+.linea-anomala {
+    cursor: crosshair;
+    transition: all 0.3s ease;
+}
+
+.linea-anomala:hover {
+    background-color: rgba(255, 61, 61, 0.2);
+    color: #ff3d3d;
+}
+
+.controles-accion {
+    padding: 20px;
+    background-color: #111;
+    border-top: 1px solid #333;
+}
