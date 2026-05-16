@@ -380,3 +380,186 @@ html, body {
     color: var(--color-void); /* El color oscuro del fondo de tu web */
     box-shadow: 0 0 10px rgba(255, 61, 61, 0.6); /* Brillo de neón rojo */
 }
+
+/* Efecto hover para el botón de enlace de expedientes en el laboratorio */
+.tarjeta-info .formulario-tactico a:hover {
+    background-color: var(--color-cyan) !important;
+    color: var(--color-void) !important;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.6) !important;
+}
+
+/* =================================================
+   INTERFAZ DEL ARCHIVO DE EXPEDIENTES (DFIR)
+   ================================================= */
+.seccion-expedientes {
+    padding: 20px 0;
+}
+
+.cabecera-seccion {
+    margin-bottom: 30px;
+}
+
+.cabecera-seccion h2 {
+    color: var(--color-cyan);
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+}
+
+.subtitulo-consola {
+    color: var(--color-ash);
+    font-family: var(--font-terminal);
+    font-size: 0.9rem;
+}
+
+/* Herramientas de filtrado */
+.barra-herramientas-dfir {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    background-color: var(--color-panel);
+    padding: 15px;
+    border: 1px solid #222;
+    border-radius: 4px;
+    margin-bottom: 30px;
+}
+
+.input-busqueda {
+    background-color: var(--color-void);
+    border: 1px solid #444;
+    color: #fff;
+    padding: 8px 15px;
+    font-family: var(--font-terminal);
+    border-radius: 4px;
+    width: 300px;
+}
+
+.input-busqueda:focus {
+    outline: none;
+    border-color: var(--color-cyan);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+}
+
+.filtros-estado {
+    display: flex;
+    gap: 10px;
+}
+
+.filtro-tag {
+    font-family: var(--font-terminal);
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border: 1px solid #333;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filtro-tag.activo, .filtro-tag:hover {
+    border-color: var(--color-cyan);
+    color: var(--color-cyan);
+}
+
+/* Rejilla de tarjetas */
+.grid-expedientes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+.tarjeta-expediente {
+    background-color: var(--color-panel);
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.tarjeta-expediente:hover {
+    transform: translateY(-5px);
+}
+
+/* Variaciones de bordes según estado del incidente */
+.tarjeta-expediente.estado-purgado:hover { border-color: #00ff22; }
+.tarjeta-expediente.estado-en-curso:hover { border-color: #ff9100; }
+.tarjeta-expediente.estado-comprometido:hover { border-color: #ff3d3d; }
+
+.cabecera-expediente {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.case-id {
+    font-family: var(--font-terminal);
+    font-size: 0.8rem;
+    color: var(--color-ash);
+}
+
+.badge-status {
+    font-family: var(--font-terminal);
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 3px;
+}
+
+.badge-status.purgado { background-color: rgba(0, 255, 34, 0.1); color: #00ff22; }
+.badge-status.en-curso { background-color: rgba(255, 145, 0, 0.1); color: #ff9100; }
+.badge-status.comprometido { background-color: rgba(255, 61, 61, 0.1); color: #ff3d3d; }
+
+.tarjeta-expediente h3 {
+    color: #fff;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.descripcion-caso {
+    color: var(--color-ash);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 15px;
+}
+
+.detalles-tecnicos {
+    background-color: var(--color-void);
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Botonera interna con tu obsesión por el brillo (Y sin espacios antes de los dos puntos) */
+.tarjeta-expediente .boton-analizar,
+.tarjeta-expediente .boton-analizar-action {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: transparent;
+    color: var(--color-cyan);
+    border: 2px solid var(--color-cyan);
+    padding: 10px;
+    border-radius: 4px;
+    font-family: var(--font-terminal);
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tarjeta-expediente .boton-analizar:hover,
+.tarjeta-expediente .boton-analizar-action:hover {
+    background-color: var(--color-cyan);
+    color: var(--color-void);
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+}
