@@ -131,3 +131,25 @@ app.get('/api/incidentes/estadisticas', async (req, res) => {
         res.status(500).json({ error: 'Fallo de telemetría en el núcleo' });
     }
 });
+
+// =================================================
+// RUTA API: ACTUALIZAR ESTADO DE UN INCIDENTE (PURGAR)
+// =================================================
+app.put('/api/incidentes/:id/purgar', async (req, res) => {
+    const { id } = req.params; // Capturamos el ID enviado en la URL
+    const query = "UPDATE incidentes SET estado = 'purgado' WHERE id = ?";
+
+    try {
+        const [result] = await pool.query(query, [id]);
+        
+        // Verificamos si el incidente realmente existía
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'El expediente especificado no existe.' });
+        }
+
+        res.json({ mensaje: `[+] Registro de seguridad actualizado. Incidente ${id} purgado.` });
+    } catch (error) {
+        console.error('[-] Error al ejecutar el veredicto en la base de datos:', error);
+        res.status(500).json({ error: 'Fallo crítico en el sistema de actualización.' });
+    }
+});

@@ -96,14 +96,37 @@ function deployReaper() {
                 btnPurgar.textContent = 'EJECUTAR PROTOCOLO REAPER';
             });
 
-            // 3. El Agente pulsa el gatillo
-            btnPurgar.addEventListener('click', () => {
-                // Aquí en el futuro podrías hacer un UPDATE en la base de datos para marcarlo como 'purgado'
-                // Por ahora, simulamos la purga y volvemos a la base
-                alert('>>> INICIANDO PURGA...\n[+] Nodos escaneados.\n[+] Espécimen Creeper eliminado de la memoria.\n\nSISTEMA ESTABILIZADO. Volviendo al Archivo Central.');
-                
-                // Redirección táctica
-                window.location.href = 'expedientes.html';
+            // 3. El Agente pulsa el gatillo (Conexión asíncrona real)
+            btnPurgar.addEventListener('click', async () => {
+                // Deshabilitamos el botón temporalmente para evitar doble envío si el agente tiene el gatillo flojo
+                btnPurgar.disabled = true;
+                btnPurgar.textContent = 'COMUNICANDO CON EL NÚCLEO...';
+
+                try {
+                    // Enviamos la orden de actualización al backend para el ID 1 (Creeper)
+                    const respuesta = await fetch('http://localhost:3000/api/incidentes/1/purgar', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    const data = await respuesta.json();
+
+                    if (respuesta.ok) {
+                        alert('>>> PROTOCOLO REAPER EJECUTADO DE FORMA CORRECTA\n\n[+] Código malicioso purgado de la memoria.\n[+] Base de datos de ReaperForge actualizada.');
+                        // Salto hiperespacial de vuelta al laboratorio para ver las métricas vivas
+                        window.location.href = 'laboratorio.html';
+                    } else {
+                        alert(`[-] ERROR EN EL SISTEMA: ${data.error}`);
+                        btnPurgar.disabled = false;
+                        btnPurgar.textContent = 'REINTENTAR PURGA';
+                    }
+
+                } catch (error) {
+                    console.error('[-] Fallo en la transmisión del veredicto:', error);
+                    alert('[-] ERROR CRÍTICO: No se pudo transmitir la orden de purga al servidor.');
+                    btnPurgar.disabled = false;
+                    btnPurgar.textContent = 'REINTENTAR PURGA';
+                }
             });
         });
     </script>

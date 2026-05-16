@@ -88,53 +88,58 @@
                     let claseEstado = '';
                     let badgeHTML = '';
                     let botonHTML = '';
-
-                    // 2. Evaluamos si el agente tiene la autorización necesaria para este caso
                     const tieneAcceso = nivelAgente >= incidente.nivel_requerido;
 
+                    // 1. ASIGNACIÓN DINÁMICA DE ENTORNO SEGÚN EL ID DEL CASO
+                    // Case 1 siempre irá a autopsia (Side-by-Side), Case 2 siempre a autopsia-regex.
+                    let archivoDestino = 'autopsia.html';
+                    if (incidente.id === 2) {
+                        archivoDestino = 'autopsia-regex.html';
+                    }
+
+                    // 2. SEMÁFORO TÁCTICO (Controla la estética y los permisos, no el destino)
                     if (incidente.estado === 'purgado') {
                         claseEstado = 'estado-purgado';
                         badgeHTML = '<span class="badge-status purgado">PURGADO</span>';
-                        botonHTML = '<a href="autopsia.html?id=1" class="boton-analizar">Revisar Autopsia</a>';
+                        botonHTML = `<a href="${archivoDestino}" class="boton-analizar">Revisar Autopsia</a>`;
                     } 
                     else if (incidente.estado === 'en-curso') {
                         claseEstado = 'estado-en-curso';
                         badgeHTML = '<span class="badge-status en-curso">EN CURSO</span>';
-                        botonHTML = '<a href="autopsia-regex.html?id=2" class="boton-analizar-action" style="display: block; text-align: center; text-decoration: none; padding: 10px; border: 2px solid #ff9100; color: #ff9100; border-radius: 4px; font-weight: bold; transition: all 0.3s ease;">INICIAR VOLCADO DE MEMORIA</a>';
+                        botonHTML = `<a href="${archivoDestino}" class="boton-analizar-action" style="display: block; text-align: center; text-decoration: none; padding: 10px; border: 2px solid #ff9100; color: #ff9100; border-radius: 4px; font-weight: bold; transition: all 0.3s ease;">Iniciar Análisis</a>`;
                     } 
                     else if (incidente.estado === 'comprometido') {
                         claseEstado = 'estado-comprometido';
                         badgeHTML = '<span class="badge-status comprometido">CRÍTICO</span>';
-                
-                        // 3. Bloqueo dinámico basado en el nivel real del agente
-                        if (tieneAcceso) {
-                            botonHTML = '<button class="boton-analizar-action">ACCEDER AL INCIDENTE</button>';
-                        } else {
-                            claseEstado += ' caso-bloqueado'; // Clase opcional para oscurecer la tarjeta
-                            botonHTML = `<button class="boton-analizar-action" disabled style="opacity: 0.3; cursor: not-allowed;">ACCESO DENEGADO (REQ. NIVEL ${incidente.nivel_requerido})</button>`;
-                        }
+        
+                    if (tieneAcceso) {
+                        botonHTML = `<a href="${archivoDestino}" class="boton-analizar-action" style="display: block; text-align: center; text-decoration: none; padding: 10px; border: 2px solid #ff3d3d; color: #ff3d3d; border-radius: 4px; font-weight: bold; transition: all 0.3s ease;">ACCEDER AL INCIDENTE</a>`;
+                    } else {
+                        claseEstado += ' caso-bloqueado';
+                        botonHTML = `<button class="boton-analizar-action" disabled style="opacity: 0.3; cursor: not-allowed;">ACCESO DENEGADO (REQ. NIVEL ${incidente.nivel_requerido})</button>`;
                     }
+                }
 
-                    // (El resto del código que genera la constante 'tarjeta' e inyecta en el visor permanece exactamente igual)
-                    const tarjeta = `
-                        <div class="tarjeta-expediente ${claseEstado}">
-                            <div class="cabecera-expediente">
-                                <span class="case-id">${incidente.case_id}</span>
-                                ${badgeHTML}
-                            </div>
-                            <h3>${incidente.titulo}</h3>
-                            <p class="descripcion-caso">${incidente.descripcion}</p>
-                            <div class="detalles-tecnicos">
-                                <span><strong>Vector:</strong> ${incidente.vector}</span>
-                                <span><strong>Impacto:</strong> ${incidente.impacto}</span>
-                            </div>
-                            <div class="formulario-tactico">
-                                ${botonHTML}
-                            </div>
+                // 3. CONSTRUCCIÓN DE LA TARJETA (Se mantiene idéntica)
+                const tarjeta = `
+                    <div class="tarjeta-expediente ${claseEstado}">
+                        <div class="cabecera-expediente">
+                            <span class="case-id">${incidente.case_id}</span>
+                            ${badgeHTML}
                         </div>
-                    `;
-                    visor.innerHTML += tarjeta;
-                });
+                        <h3>${incidente.titulo}</h3>
+                        <p class="descripcion-caso">${incidente.descripcion}</p>
+                        <div class="detalles-tecnicos">
+                            <span><strong>Vector:</strong> ${incidente.vector}</span>
+                            <span><strong>Impacto:</strong> ${incidente.impacto}</span>
+                        </div>
+                        <div class="formulario-tactico">
+                            ${botonHTML}
+                        </div>
+                    </div>
+                `;
+                visor.innerHTML += tarjeta;
+            });
 
             } catch (error) {
                 console.error('[-] Fallo en el enlace de datos:', error);
