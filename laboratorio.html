@@ -104,59 +104,45 @@
         </div>
     </footer>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            
+            // ==========================================
+            // 1. TELEMETRÍA DFIR (Contadores)
+            // ==========================================
             const txtPurgados = document.getElementById('meta-purgados');
             const txtEnCurso = document.getElementById('meta-encurso');
             const txtCriticos = document.getElementById('meta-criticos');
 
             try {
+                // Petición a la API del servidor (Node)
                 const response = await fetch('http://localhost:3000/api/incidentes/estadisticas');
                 const stats = await response.json();
 
                 if (response.ok) {
-                    if(txtPurgados) txtPurgados.textContent = stats.purgados || 0;
-                    if(txtEnCurso) txtEnCurso.textContent = stats.enCurso || 0;
-                    if(txtCriticos) txtCriticos.textContent = stats.comprometidos || 0;
+                    // Inyectamos los datos solo si las etiquetas existen
+                    if (txtPurgados) txtPurgados.textContent = stats.purgados || 0;
+                    if (txtEnCurso) txtEnCurso.textContent = stats.enCurso || 0;
+                    if (txtCriticos) txtCriticos.textContent = stats.comprometidos || 0;
                 }
             } catch (err) {
-                console.error('[-] Error al sincronizar el panel táctico:', err);
+                console.error('[-] Error al sincronizar la telemetría:', err);
                 const alertas = [txtPurgados, txtEnCurso, txtCriticos];
                 alertas.forEach(el => { if(el) { el.textContent = '??'; el.style.color = '#ff3d3d'; }});
             }
 
-            const agente = JSON.parse(sesion);
-            
-            // Inyectamos los datos en la interfaz
-            document.getElementById('perfil-nombre').textContent = agente.username;
-            document.getElementById('info-id').textContent = `@${agente.username.toLowerCase()}`;
-            document.getElementById('info-clearance').textContent = `Nivel ${agente.level || 1}`;
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Localizamos las posiciones en el panel
-            const txtTotal = document.getElementById('meta-total');
-            const txtPurgados = document.getElementById('meta-purgados');
-            const txtEnCurso = document.getElementById('meta-encurso');
-            const txtCriticos = document.getElementById('meta-criticos');
-
-            try {
-                // Consultamos las estadísticas reales al backend
-                const response = await fetch('http://localhost:3000/api/incidentes/estadisticas');
-                const stats = await response.json();
-
-                // Si el servidor responde correctamente, actualizamos el DOM
-                if (response.ok) {
-                    txtTotal.textContent = stats.total || 0;
-                    txtPurgados.textContent = stats.purgados || 0;
-                    txtEnCurso.textContent = stats.enCurso || 0;
-                    txtCriticos.textContent = stats.comprometidos || 0;
-                }
-            } catch (err) {
-                console.error('[-] Error al sincronizar el panel táctico:', err);
-                // Si falla, dejamos un indicador visual de anomalía
-                const alertas = [txtTotal, txtPurgados, txtEnCurso, txtCriticos];
-                alertas.forEach(el => { if(el) el.textContent = '??'; el.style.color = '#ff3d3d'; });
+            // ==========================================
+            // 2. IDENTIFICACIÓN DE AGENTE (Perfil)
+            // ==========================================
+            const sesionGuardada = localStorage.getItem('agente_sesion');
+            if (sesionGuardada) {
+                const agente = JSON.parse(sesionGuardada);
+                // Extraemos el nivel de clearance (sea del objeto agente o de la variable aislada)
+                const clearance = agente.level || localStorage.getItem('agente_level') || 1;
+                
+                // Inyectamos los datos en la interfaz
+                document.getElementById('perfil-nombre').textContent = agente.username;
+                document.getElementById('info-id').textContent = `@${agente.username.toLowerCase()}`;
+                document.getElementById('info-clearance').textContent = `Nivel ${clearance}`;
             }
         });
     </script>
