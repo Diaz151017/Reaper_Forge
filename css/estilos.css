@@ -1,676 +1,260 @@
-/* =========================================
-   VARIABLES TÁCTICAS Y RESETEO
-   ========================================= */
-:root {
-    --color-void: #050505;        /* Negro profundo de terminal */
-    --color-cyan: #00e5ff;        /* Cian neón Blue Team */
-    --color-cyan-dark: #008b99;   /* Cian oscurecido para hovers */
-    --color-ash: #E0E0E0;         /* Gris ceniza para texto principal */
-    --color-panel: #111111;       /* Gris muy oscuro para cajas y terminales */
-    --font-terminal: 'Consolas', 'Courier New', monospace;
-}
+/* ==========================================================================
+   INTERFAZ DEL PORTAL DE ACCESO PERIMETRAL (GATEWAY)
+   ========================================================================== */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    margin: 0 !important;
-    padding: 0 !important;
-    min-height: 100vh; /* EL PARCHE DEL FOOTER: Altura mínima = 100% de tu monitor */
-    overflow-x: hidden;
-    background-color: var(--color-void);
-    color: var(--color-ash);
-    font-family: var(--font-terminal);
-    display: flex; /* Esto junto con el flex: 1 del main empuja el footer al fondo */
+/* Ajuste absoluto del Viewport para prevenir scrolls residuales */
+.body-gateway {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+    display: flex;
     flex-direction: column;
-}
-
-/* =========================================
-   TOPBAR TÁCTICA (MENÚ) - MODO DARK NEÓN
-   ========================================= */
-.topbar-tactica {
-    height: 70px;
     background-color: var(--color-void);
-    display: flex;
-    align-items: center; 
-    justify-content: flex-start; 
-    padding: 0 20px;
-    border-bottom: 2px solid var(--color-cyan); /* Línea de contención cian inferior */
-    box-shadow: 0 4px 20px rgba(0, 229, 255, 0.15); /* Resplandor sutil bajo la barra */
+    font-family: var(--font-terminal);
 }
 
-/* Control estricto sobre la imagen del logo dentro del menú */
-.nav-logo {
-    height: 50px !important;      
-    width: auto !important;       
-    max-width: 150px !important;  
-    margin-right: 40px !important;
-    display: block !important;
-    filter: drop-shadow(0px 0px 15px rgba(0, 229, 255, 0.4)); /* Resplandor cian */    
-}
-
-/* Contenedor de los enlaces */
-.nav-links {
-    display: flex;
-    gap: 20px; /* Separación ajustada para que los marcos respiren */
-}
-
-/* Estilo de los botones del menú (Heredando el estilo táctico) */
-.nav-links a {
-    background-color: transparent; /* Iniciando en negro/transparente */
-    color: var(--color-cyan); /* Letras cian */
-    border: 2px solid var(--color-cyan); /* Marco cian */
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1rem;
-    padding: 8px 18px;
-    border-radius: 4px;
-    text-transform: uppercase; /* Toque de terminal de comandos */
-    letter-spacing: 1px;
-    transition: all 0.3s ease; /* Transición fluida para el efecto hover */
-}
-
-/* Efecto al pasar el ratón (Destello y Contraste) */
-.nav-links a:hover, 
-.nav-links a.active {
-    background-color: var(--color-cyan); /* El fondo se llena de cian */
-    color: var(--color-void); /* El texto pasa a negro para contrastar */
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.6); /* Efecto de resplandor neón */
-}
-
-/* =========================================
-   CONTENEDOR PRINCIPAL Y HERO
-   ========================================= */
-.contenedor-consola {
-    flex: 1; /* Ocupa todo el espacio restante empujando el footer abajo */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 20px;
-}
-
-.hero-tactico {
-    text-align: center;
-    max-width: 800px;
-}
-
-.logo-central {
-    max-width: 300px; /* Tamaño controlado para el logo grande */
-    height: auto;
-    margin-bottom: 30px;
-    filter: drop-shadow(0px 0px 15px rgba(0, 229, 255, 0.4)); /* Resplandor cian */
-}
-
-.hero-tactico-creeper {
-    text-align: center;
-    max-width: 800px;
-}
-
-.creeper-image {
-    max-width: 300px; /* Tamaño controlado para el logo grande */
-    height: auto;
-    margin-bottom: 30px;
-    filter: drop-shadow(0px 0px 15px rgba(0, 229, 255, 0.4)); /* Resplandor cian */
-}
-
-.hero-tactico-herencia {
-    text-align: center;
-    max-width: 800px;
-}
-
-.logo-herencia {
-    max-width: 300px; /* Tamaño controlado para el logo grande */
-    height: auto;
-    margin-bottom: 30px;
-    filter: drop-shadow(0px 0px 15px rgba(0, 229, 255, 0.4)); /* Resplandor cian */
-}
-
-.terminal-intro {
-    background-color: var(--color-panel);
-    border-left: 4px solid var(--color-cyan);
-    padding: 30px;
-    border-radius: 4px;
-    margin-bottom: 40px;
-    text-align: left;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.terminal-intro h1 {
-    color: var(--color-cyan);
-    font-size: 2rem;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-}
-
-.terminal-intro p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 15px;
-}
-
-.terminal-intro p strong {
-    color: var(--color-cyan);
-}
-
-/* =========================================
-   BOTONES Y LLAMADAS A LA ACCIÓN
-   ========================================= */
-.boton-iniciar {
-    display: inline-block;
-    background-color: transparent;
-    color: var(--color-cyan);
-    border: 2px solid var(--color-cyan);
-    padding: 15px 40px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-}
-
-.boton-iniciar:hover {
-    background-color: var(--color-cyan);
-    color: var(--color-void);
-    box-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
-}
-
-/* =========================================
-   PIE DE PÁGINA (FOOTER TÁCTICO)
-   ========================================= */
-.footer-tactico {
-    background-color: var(--color-panel);
-    border-top: 1px solid rgba(0, 229, 255, 0.2);
-    padding: 20px 0;
+/* Barra superior clínica del Gateway */
+.topbar-gateway {
     width: 100%;
-}
-
-.footer-container {
-    max-width: 1200px;
-    margin: 0 auto;
+    height: 35px;
+    background-color: #0b0b10;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.15);
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
-    font-size: 0.9rem;
-}
-
-.lema {
-    color: var(--color-cyan);
-    font-style: italic;
-    margin-top: 5px;
-    display: block;
-}
-
-.footer-links a {
-    color: var(--color-ash);
-    text-decoration: none;
-    margin-left: 20px;
-    transition: color 0.3s ease;
-}
-
-.footer-links a:hover {
-    color: var(--color-cyan);
-}
-
-.footer-social a {
-    color: var(--color-ash);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-/* =========================================
-   ZONA DE AUTENTICACIÓN (ALTA DE AGENTES)
-   ========================================= */
-.nav-auth {
-    margin-left: auto; /* La fuerza motriz que lo empuja al extremo derecho */
-    display: flex;
-}
-
-.boton-acceso {
-    background-color: transparent;
-    color: var(--color-cyan);
-    border: 2px solid var(--color-cyan); /* Borde punteado para diferenciarlo de los enlaces estándar */
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1rem;
-    padding: 8px 18px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-}
-
-.boton-acceso:hover,
-.boton-acceso.active {
-    background-color: var(--color-cyan);
-    color: var(--color-void);
-    border: 1px solid var(--color-cyan);
-    box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
-}
-
-/* =========================================
-   FORMULARIOS TÁCTICOS (INPUTS)
-   ========================================= */
-.formulario-tactico {
-    margin-top: 25px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.grupo-input {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-}
-
-.grupo-input label {
-    color: var(--color-cyan);
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.grupo-input input {
-    background-color: var(--color-void); /* Fondo negro absoluto */
-    color: var(--color-ash); /* Texto gris ceniza */
-    border: 1px solid rgba(0, 229, 255, 0.3); /* Borde cian apagado */
-    padding: 12px 15px;
-    font-family: var(--font-terminal);
-    font-size: 1rem;
-    border-radius: 4px;
-    outline: none; /* Quitamos el feo resplandor azul por defecto del navegador */
-    transition: all 0.3s ease;
-}
-
-/* Efecto al hacer clic en escribir dentro del input */
-.grupo-input input:focus {
-    border-color: var(--color-cyan);
-    box-shadow: 0 0 10px rgba(0, 229, 255, 0.2) inset; /* Resplandor interno sutil */
-}
-
-/* Ajuste del botón submit para que encaje en el formulario */
-.formulario-tactico .boton-iniciar {
-    margin-top: 10px;
-    cursor: pointer;
-    background-color: transparent; /* Igualamos al fondo para que destaque el borde */
-    color: var(--color-cyan);
-    border: 2px solid var(--color-cyan); /* Borde punteado para diferenciarlo de los enlaces estándar */
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1rem;
-    padding: 8px 18px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-}
-
-.formulario-tactico .boton-iniciar:hover,
-.formulario-tactico .boton-iniciar:active {
-    background-color: var(--color-cyan);
-    color: var(--color-void);
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
-}
-
-/* =========================================
-   PANTALLA DIVIDIDA DE AUTENTICACIÓN
-   ========================================= */
-.hero-auth {
-    width: 100%;
-    max-width: 1000px; /* Hacemos el contenedor más ancho para que quepan ambos paneles */
-    margin: 0 auto;
-}
-
-.paneles-auth {
-    display: flex;
-    gap: 40px; /* Separación entre el login y el registro */
-    align-items: flex-start; /* Evita que un panel se estire si el otro es más largo */
-}
-
-.paneles-auth .terminal-intro {
-    flex: 1; /* Ambos paneles ocupan exactamente el 50% del espacio */
-    margin-bottom: 0; 
-}
-
-/* Protocolo de Responsividad: Si la pantalla es pequeña, se apilan */
-@media (max-width: 850px) {
-    .paneles-auth {
-        flex-direction: column;
-    }
-}
-
-/* =================================================
-   ELEMENTOS DINÁMICOS DEL MENÚ (LOGGED IN)
-   ================================================= */
-.perfil-menu-contenedor {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.agente-tag {
-    color: var(--color-cyan);
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-/* Estado normal del botón */
-.boton-logout {
-    background: transparent;
-    border: 1px solid #ff3d3d;
-    color: #ff3d3d;
-    padding: 6px 12px;
-    font-family: var(--font-terminal);
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s ease; /* Esta línea hace que el cambio de color sea suave y no brusco */
-}
-
-/* Estado ALERTA (Hover) del botón */
-.boton-logout:hover {
-    background-color: #ff3d3d;
-    color: var(--color-void); /* El color oscuro del fondo de tu web */
-    box-shadow: 0 0 10px rgba(255, 61, 61, 0.6); /* Brillo de neón rojo */
-}
-
-/* Efecto hover para el botón de enlace de expedientes en el laboratorio */
-.tarjeta-info .formulario-tactico a:hover {
-    background-color: var(--color-cyan) !important;
-    color: var(--color-void) !important;
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.6) !important;
-}
-
-/* =================================================
-   INTERFAZ DEL ARCHIVO DE EXPEDIENTES (DFIR)
-   ================================================= */
-.seccion-expedientes {
-    padding: 20px 0;
-}
-
-.cabecera-seccion {
-    margin-bottom: 30px;
-}
-
-.cabecera-seccion h2 {
-    color: var(--color-cyan);
-    font-size: 1.8rem;
-    letter-spacing: 1px;
-}
-
-.subtitulo-consola {
-    color: var(--color-ash);
-    font-family: var(--font-terminal);
-    font-size: 0.9rem;
-}
-
-/* Herramientas de filtrado */
-.barra-herramientas-dfir {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    background-color: var(--color-panel);
-    padding: 15px;
-    border: 1px solid #222;
-    border-radius: 4px;
-    margin-bottom: 30px;
-}
-
-.input-busqueda {
-    background-color: var(--color-void);
-    border: 1px solid #444;
-    color: #fff;
-    padding: 8px 15px;
-    font-family: var(--font-terminal);
-    border-radius: 4px;
-    width: 300px;
-}
-
-.input-busqueda:focus {
-    outline: none;
-    border-color: var(--color-cyan);
-    box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
-}
-
-.filtros-estado {
-    display: flex;
-    gap: 10px;
-}
-
-.filtro-tag {
-    font-family: var(--font-terminal);
-    font-size: 0.8rem;
-    padding: 5px 10px;
-    border: 1px solid #333;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.filtro-tag.activo, .filtro-tag:hover {
-    border-color: var(--color-cyan);
-    color: var(--color-cyan);
-}
-
-/* Rejilla de tarjetas */
-.grid-expedientes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 25px;
-}
-
-.tarjeta-expediente {
-    background-color: var(--color-panel);
-    border: 1px solid #222;
-    border-radius: 4px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-}
-
-.tarjeta-expediente:hover {
-    transform: translateY(-5px);
-}
-
-/* Variaciones de bordes según estado del incidente */
-.tarjeta-expediente.estado-purgado:hover { border-color: #00ff22; }
-.tarjeta-expediente.estado-en-curso:hover { border-color: #ff9100; }
-.tarjeta-expediente.estado-comprometido:hover { border-color: #ff3d3d; }
-
-.cabecera-expediente {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.case-id {
-    font-family: var(--font-terminal);
-    font-size: 0.8rem;
-    color: var(--color-ash);
-}
-
-.badge-status {
-    font-family: var(--font-terminal);
     font-size: 0.75rem;
-    font-weight: bold;
-    padding: 3px 8px;
-    border-radius: 3px;
-}
-
-.badge-status.purgado { background-color: rgba(0, 255, 34, 0.1); color: #00ff22; }
-.badge-status.en-curso { background-color: rgba(255, 145, 0, 0.1); color: #ff9100; }
-.badge-status.comprometido { background-color: rgba(255, 61, 61, 0.1); color: #ff3d3d; }
-
-.tarjeta-expediente h3 {
-    color: #fff;
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-}
-
-.descripcion-caso {
     color: var(--color-ash);
-    font-size: 0.9rem;
-    line-height: 1.4;
-    margin-bottom: 15px;
+    letter-spacing: 1px;
 }
 
-.detalles-tecnicos {
-    background-color: var(--color-void);
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    margin-bottom: 20px;
+/* Punto de pulso activo */
+.status-indicator {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    align-items: center;
+    gap: 8px;
 }
 
-/* Botonera interna con tu obsesión por el brillo (Y sin espacios antes de los dos puntos) */
-.tarjeta-expediente .boton-analizar,
-.tarjeta-expediente .boton-analizar-action {
-    display: block;
-    width: 100%;
-    text-align: center;
-    background: transparent;
-    color: var(--color-cyan);
-    border: 2px solid var(--color-cyan);
-    padding: 10px;
-    border-radius: 4px;
-    font-family: var(--font-terminal);
-    font-weight: bold;
-    font-size: 0.9rem;
-    text-decoration: none;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.tarjeta-expediente .boton-analizar:hover,
-.tarjeta-expediente .boton-analizar-action:hover {
+.pulse-dot {
+    width: 6px;
+    height: 6px;
     background-color: var(--color-cyan);
-    color: var(--color-void);
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--color-cyan);
 }
 
-/* =================================================
-   ENTORNO DE VISOR DUAL (AUTOPSIA SIDE-BY-SIDE)
-   ================================================= */
-.body-autopsia {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden; /* Evitamos scroll en la página principal */
+.pulse-dot.active {
+    animation: pulsoNeon 1.5s infinite alternate;
 }
 
-.contenedor-visor-dual {
+@keyframes pulsoNeon {
+    from { opacity: 0.4; box-shadow: 0 0 2px var(--color-cyan); }
+    to { opacity: 1; box-shadow: 0 0 10px var(--color-cyan); }
+}
+
+/* Contenedor dividido con CSS Grid */
+.contenedor-portal {
+    flex: 1;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    padding: 20px;
-    flex-grow: 1; /* Ocupa todo el espacio restante bajo el menú */
-    height: calc(100vh - 70px);
+    grid-template-columns: 1.2fr 1fr; /* Izquierda un poco más ancha para simular logs */
+    gap: 30px;
+    padding: 30px;
+    align-items: center;
+    height: calc(100vh - 65px); /* Descontando topbar y footer */
 }
 
-.panel-forense {
-    background-color: var(--color-panel);
-    border: 1px solid #333;
+/* Panel Izquierdo: Terminal de Logs */
+.panel-terminal-izquierdo {
+    background-color: #0a0a0f;
+    border: 1px solid rgba(0, 229, 255, 0.1);
     border-radius: 4px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
 }
 
-.cabecera-panel {
-    background-color: #111;
+.panel-terminal-izquierdo .terminal-header {
+    background-color: #12121b;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1);
     padding: 10px 15px;
-    border-bottom: 1px solid #333;
-}
-
-.cabecera-panel h3 {
-    color: var(--color-cyan);
-    font-family: var(--font-terminal);
-    font-size: 1rem;
-    margin: 0;
-}
-
-.contenido-codigo {
-    flex-grow: 1;
-    padding: 15px;
-    overflow-y: auto; /* Scroll interno solo para el código */
-    background-color: var(--color-void);
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.9rem;
-    color: #a0a0a0;
-    line-height: 1.5;
-}
-
-/* Efecto para cuando el usuario seleccione la anomalía */
-.linea-anomala {
-    cursor: crosshair;
-    transition: all 0.3s ease;
-}
-
-.linea-anomala:hover {
-    background-color: rgba(255, 61, 61, 0.2);
-    color: #ff3d3d;
-}
-
-.controles-accion {
-    padding: 20px;
-    background-color: #111;
-    border-top: 1px solid #333;
-}
-
-/* =================================================
-   MÓDULO DE MÉTRICAS (PANEL DE LABORATORIO)
-   ================================================= */
-.modulo-metricas {
-    background-color: var(--color-panel);
-    border: 1px solid #222;
-    padding: 20px;
-    border-radius: 4px;
-    margin-top: 25px;
-}
-
-.modulo-metricas h3 {
-    color: var(--color-cyan);
-    margin-bottom: 20px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 10px;
-}
-
-.contenedor-contadores {
     display: flex;
-    justify-content: space-around;
-    text-align: center;
-    margin-bottom: 25px;
-    font-family: var(--font-terminal);
+    justify-content: space-between;
+    align-items: center;
 }
 
-.numero-metrica {
-    font-size: 2rem;
+.panel-terminal-izquierdo .terminal-title {
+    color: var(--color-cyan);
+    font-size: 0.85rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.panel-terminal-izquierdo .terminal-badge {
+    background-color: rgba(0, 229, 255, 0.1);
+    color: var(--color-cyan);
+    border: 1px solid var(--color-cyan);
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 3px;
     font-weight: bold;
 }
 
-/* Semáforo táctico extraído del inline */
-.numero-metrica.purgado { color: #00ff22; text-shadow: 0 0 10px rgba(0, 255, 34, 0.4); }
-.numero-metrica.en-curso { color: #ff9100; text-shadow: 0 0 10px rgba(255, 145, 0, 0.4); }
-.numero-metrica.comprometido { color: #ff3d3d; text-shadow: 0 0 10px rgba(255, 61, 61, 0.4); }
+.terminal-body-log {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #6d7d93;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
-.etiqueta-metrica {
-    font-size: 0.8rem;
-    color: var(--color-ash);
+.log-line {
+    border-left: 2px solid #1a1a26;
+    padding-left: 10px;
+}
+
+.log-line.alert {
+    color: #ff9100;
+    border-left-color: #ff9100;
+    background-color: rgba(255, 145, 0, 0.03);
+}
+
+.log-line.critical {
+    color: #ff3d37;
+    border-left-color: #ff3d37;
+    background-color: rgba(255, 61, 55, 0.03);
+    animation: parpadeoLento 2s infinite alternate;
+}
+
+@keyframes parpadeoLento {
+    from { opacity: 0.7; }
+    to { opacity: 1; }
+}
+
+/* Panel Derecho: Caja de Login */
+.panel-login-derecho {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    height: 100%;
+}
+
+.logo-box {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.svg-logo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.5));
+}
+
+.logo-box h1 {
+    font-size: 2.2rem;
+    color: #fff;
+    letter-spacing: 3px;
+    margin: 0;
+    text-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+}
+
+.logo-box .motto {
+    font-size: 0.75rem;
+    color: var(--color-cyan);
+    letter-spacing: 2px;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Formulario */
+.formulario-tactico-box {
+    width: 100%;
+    max-width: 380px;
+    background-color: #0c0c14;
+    border: 1px solid #1c1c28;
+    border-radius: 4px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.input-grupo {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-grupo label {
+    font-size: 0.7rem;
+    color: #6d7d93;
     letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.input-grupo input {
+    background-color: #050508;
+    border: 1px solid #222230;
+    color: #fff;
+    padding: 10px 12px;
+    font-family: var(--font-terminal);
+    font-size: 0.95rem;
+    border-radius: 4px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-grupo input:focus {
+    border-color: var(--color-cyan);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
+}
+
+/* Botón Portal de Alta Intensidad */
+.boton-portal-brillante {
+    width: 100%;
+    background-color: transparent;
+    color: var(--color-cyan);
+    border: 2px solid var(--color-cyan);
+    padding: 12px;
+    font-family: var(--font-terminal);
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.boton-portal-brillante:hover {
+    background-color: var(--color-cyan);
+    color: var(--color-void);
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+}
+
+/* Footer anclado */
+.footer-gateway {
+    width: 100%;
+    height: 30px;
+    background-color: #050508;
+    border-top: 1px solid rgba(0, 229, 255, 0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.75rem;
+    color: #435269;
+}
+
+.footer-gateway .lema {
+    color: var(--color-cyan);
+    font-style: italic;
+    margin-left: 10px;
 }

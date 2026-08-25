@@ -3,81 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ReaperForge: Digital Forensics Frontier. Entorno de entrenamiento DFIR.">
+    <meta name="description" content="ReaperForge: Portal de Acceso Perimetral DFIR.">
     <meta name="author" content="[T] Adrián Díaz García">
-    <title>Inicio - ReaperForge</title>
+    <title>Acceso Seguro - ReaperForge</title>
 
-    <link rel="stylesheet" href="css/estilos.css?v=2.0">
+    <link rel="stylesheet" href="css/estilos.css?v=5.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="body-gateway">
 
-    <nav class="topbar-tactica">
-        <img src="img/Reaper_Forge_Menu.png" alt="Logo de ReaperForge" class="nav-logo">
-
-        <div class="nav-links">
-            <a href="index.html" class="active">Inicio</a>
-            <a href="herencia.html">Origen de la Fragua</a>
-            <a href="laboratorio.html">El Laboratorio</a>
-            <a href="expedientes.html">Expedientes</a>
+    <!-- BARRA SUPERIOR OPERATIVA DE SEÑAL -->
+    <header class="topbar-gateway">
+        <div class="status-indicator">
+            <span class="pulse-dot active"></span>
+            <span class="status-text">BSAI SECURE NODE // ESTADO: EN LÍNEA</span>
         </div>
+        <div class="system-time" id="system-time">UTC_TIME: LOADING...</div>
+    </header>
 
-        <div class="nav-auth">
-            <a href="registro.html" class="boton-acceso">Inicio de sesión/Alta de Agente</a>
-        </div>
-    </nav>
+    <main class="contenedor-portal">
 
-    <main class="contenedor-consola">
-        <section class="hero-tactico">
-            <img src="img/Reaper_Forge.png" alt="Emblema ReaperForge" class="logo-central">
-            
-            <div class="terminal-intro">
-                <h1>Bienvenido a ReaperForge.</h1>
-                <p>En el mundo real, los sistemas caen. El código perfecto falla. Y cuando eso ocurre, todo el mundo entra en pánico menos nosotros. Nosotros somos el <strong>Blue Team</strong>.</p>
-                <p>Nuestra misión no es evitar que el servidor sangre; nuestra misión es analizar la sangre para encontrar al atacante. Deja de leer texto y empieza a buscar huellas.</p>
+        <!-- PANEL IZQUIERDO: TERMINAL DE TELEMETRÍA PERIMETRAL -->
+        <section class="panel-terminal-izquierdo">
+            <div class="terminal-header">
+                <span class="terminal-title"><i class="fas fa-satellite-dish"></i> DETECCIONES Y REGISTROS ACTIVOS</span>
+                <span class="terminal-badge">SYS_LOG_MONITOR</span>
             </div>
-            
-            <a href="registro.html" class="boton-iniciar" id="btn-protocolo">INICIAR PROTOCOLO</a>
+            <div class="terminal-body-log" id="terminal-logs">
+                <div class="log-line">[SYS] Conexión establecida con MySQL Pool... [OK]</div>
+                <div class="log-line">[SEC] Criptomódulo Bcrypt... [ACTIVO]</div>
+                <div class="log-line">[SYS] Escaneando clúster TalaIA de la UIB... [MONITORIZANDO]</div>
+                <div class="log-line alert">[WARN] Anomalía menor detectada en nodo TTY4... [REGISTRANDO]</div>
+                <div class="log-line critical">[CRIT] Expediente CASE-2026-NEKROS requiere triage en caliente...</div>
+                <div class="log-line">[SYS] Listo para inyección de credenciales del Agente...</div>
+            </div>
         </section>
+
+        <!-- PANEL DERECHO: FORMULARIO DE ACCESO Y LOGO -->
+        <section class="panel-login-derecho">
+            <div class="logo-box">
+                <!-- Logotipo Isotipo Simplificado Forjado a Código (SVG Inline) -->
+                <svg class="svg-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Mástil / Circuitos Rectos -->
+                    <path d="M 50,85 L 50,30" stroke="#00e5ff" stroke-width="3" stroke-linecap="square"/>
+                    <path d="M 45,75 L 50,70 L 55,75" stroke="#00e5ff" stroke-width="1.5" fill="none"/>
+                    <path d="M 45,55 L 50,50 L 55,55" stroke="#00e5ff" stroke-width="1.5" fill="none"/>
+
+                    <!-- Hoja Segmentada de la Guadaña (Estilo Cronos Crio-Digital) -->
+                    <path d="M 50,30 Q 75,30 80,45 C 75,40 60,40 50,30 Z" fill="#00e5ff" opacity="0.9"/>
+                    <!-- Bloques Geométricos Desprendidos de la Cosecha -->
+                    <rect x="78" y="48" width="4" height="4" fill="#00e5ff" opacity="0.8"/>
+                    <rect x="74" y="54" width="3" height="3" fill="#00e5ff" opacity="0.6"/>
+                    <rect x="70" y="60" width="2" height="2" fill="#00e5ff" opacity="0.4"/>
+
+                    <!-- Punto de Unión Incandescente (Faro del Blue Team) -->
+                    <circle cx="50" cy="30" r="3.5" fill="#ffffff" filter="drop-shadow(0 0 4px #00e5ff)"/>
+                </svg>
+                <h1>REAPERFORGE</h1>
+                <span class="motto">// DIGITAL FORENSICS FRONTIER</span>
+            </div>
+
+            <div class="formulario-tactico-box">
+                <form id="login-form-gateway" class="form-acceso-rapido">
+                    <div class="input-grupo">
+                        <label for="reg-username"><i class="fas fa-fingerprint"></i> IDENTIFICADOR DEL AGENTE</label>
+                        <input type="text" id="reg-username" placeholder="Ej: Agente_001" required autocomplete="off">
+                    </div>
+                    <div class="input-grupo">
+                        <label for="reg-password"><i class="fas fa-lock"></i> CLAVE DE ACCESO CRIPTOGRÁFICA</label>
+                        <input type="password" id="reg-password" placeholder="••••••••••••" required>
+                    </div>
+                    <button type="submit" class="boton-portal-brillante">
+                        ACCEDER AL ÁREA DE TRIAGE [T]
+                    </button>
+                </form>
+            </div>
+        </section>
+
     </main>
-    
-    <footer class="footer-tactico">
-        <div class="footer-container">
-            <div class="footer-logo">
-                <p>&copy; 2026 Desarrollado por <strong>Adrián Díaz García</strong>. <br> <span class="lema">// El código permanece [T]</span></p>
-            </div>
-            
-            <div class="footer-links">
-                <a href="#">Aviso Legal</a></li>
-                <a href="#">Política de Cookies</a></li>
-                <a href="#">Términos</a></li>
-                <a href="#">Protocolos de Seguridad</a>
-            </div>
-            
-            <div class="footer-social">
-                <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
-            </div>
-        </div>
+
+    <!-- FOOTER TÁCTICO INTEGRADO -->
+    <footer class="footer-gateway">
+        <p>&copy; 2026 Desarrollado por <strong>Adrián Díaz García</strong>. <span class="lema">// El código permanece [T]</span></p>
     </footer>
+
+    <!-- Lógica local de tiempo de terminal y envío asíncrono -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const btnProtocolo = document.getElementById('btn-protocolo');
-            const sesionActiva = localStorage.getItem('agente_sesion');
-            
-            // Si el sensor detecta una credencial viva en la memoria...
-            if (sesionActiva && btnProtocolo) {
-                // Alteramos el destino del enlace en tiempo de ejecución
-                btnProtocolo.href = 'laboratorio.html';
-                
-                // Opcional: Puedes cambiar sutilmente el texto para indicar que reanuda la sesión
-                btnProtocolo.textContent = 'REANUDAR PROTOCOLO';
-            }
+            // Reloj UTC en tiempo real para simular conexión real
+            const timeEl = document.getElementById('system-time');
+            const updateClock = () => {
+                const now = new Date();
+                timeEl.textContent = `UTC_TIME: ${now.toUTCString().replace('GMT', 'UTC')}`;
+            };
+            setInterval(updateClock, 1000);
+            updateClock();
         });
     </script>
-    <script src="js/auth.js"></script>
-    <script src="js/global.js"></script>
 </body>
-</html> 
+</html>
