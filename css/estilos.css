@@ -2,6 +2,12 @@
    INTERFAZ DEL PORTAL DE ACCESO PERIMETRAL (GATEWAY)
    ========================================================================== */
 
+:root {
+    --color-void: #050505;
+    --color-ash: #E0E0E0;
+    --color-cyan: #00E5FF;
+}
+
 /* Ajuste absoluto del Viewport para prevenir scrolls residuales */
 .body-gateway {
     height: 100vh !important;
@@ -10,6 +16,7 @@
     display: flex;
     flex-direction: column;
     background-color: var(--color-void);
+    color: var(--color-ash);
     font-family: var(--font-terminal);
 }
 
