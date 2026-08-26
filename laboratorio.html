@@ -142,7 +142,8 @@
                 // Inyectamos los datos en la interfaz
                 document.getElementById('perfil-nombre').textContent = agente.username;
                 document.getElementById('info-id').textContent = `@${agente.username.toLowerCase()}`;
-                document.getElementById('info-clearance').textContent = `Nivel ${clearance}`;
+                // Si en el almacenamiento está guardado el rol de la respuesta del login, lo inyectamos directamente
+                document.getElementById('info-clearance').textContent = agente.rol || `Nivel ${clearance}`;
             }
         });
     </script>
