@@ -3,9 +3,9 @@
    ========================================================================== */
 
 :root {
-    --color-void: #050505;
-    --color-ash: #E0E0E0;
-    --color-cyan: #00E5FF;
+    --color-void: #050505; /* Negro profundo de terminal */
+    --color-ash: #E0E0E0; /* Gris ceniza para texto principal */
+    --color-cyan: #00E5FF; /* Cian neón Blue Team */
 }
 
 /* Ajuste absoluto del Viewport para prevenir scrolls residuales */
@@ -29,7 +29,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
+    padding: 0 25px;
+    box-sizing: border-box; /* Fundamental: asegura que el padding no desborde el ancho total */
     font-size: 0.75rem;
     color: var(--color-ash);
     letter-spacing: 1px;
@@ -68,6 +69,12 @@
     padding: 30px;
     align-items: center;
     height: calc(100vh - 65px); /* Descontando topbar y footer */
+}
+
+.system-time {
+    white-space: nowrap; /* Prohíbe terminantemente que el texto salte a una segunda línea */
+    flex-shrink: 0; /* Evita que Flexbox decida encoger este div si la pantalla se estrecha */
+    font-family: monospace; /* Opcional, pero esta fuente le da el toque técnico */
 }
 
 /* Panel Izquierdo: Terminal de Logs */

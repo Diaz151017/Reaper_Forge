@@ -44,7 +44,7 @@
             <img src="img/Reaper_Forge_Menu.png" alt="ReaperForge Logo" class="logo-central">
                 <h1>REAPERFORGE</h1>
                 <span class="motto">// DIGITAL FORENSICS FRONTIER</span>
-
+                <br>
             <div class="formulario-tactico-box">
                 <form id="login-form-gateway" class="form-acceso-rapido">
                     <div class="input-grupo">
@@ -89,14 +89,30 @@
     </footer>
 
     <!-- Lógica local de tiempo de terminal y envío asíncrono -->
-    <script>
+     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Reloj UTC en tiempo real para simular conexión real
             const timeEl = document.getElementById('system-time');
+        
             const updateClock = () => {
                 const now = new Date();
-                timeEl.textContent = `UTC_TIME: ${now.toUTCString().replace('GMT', 'UTC')}`;
+            
+                // Forzamos el formato en inglés que tenías originalmente
+                const dias = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                const meses = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+                const diaSemana = dias[now.getDay()];
+                const dia = String(now.getDate()).padStart(2, '0');
+                const mes = meses[now.getMonth()];
+                const anio = now.getFullYear();
+            
+                const horas = String(now.getHours()).padStart(2, '0');
+                const minutos = String(now.getMinutes()).padStart(2, '0');
+                const segundos = String(now.getSeconds()).padStart(2, '0');
+            
+                // Ensamblamos la cadena con tu hora local real
+                timeEl.textContent = `SYS_TIME: ${diaSemana}, ${dia} ${mes} ${anio} ${horas}:${minutos}:${segundos} CEST`;
             };
+        
             setInterval(updateClock, 1000);
             updateClock();
         });
