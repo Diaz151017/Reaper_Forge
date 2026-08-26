@@ -16,76 +16,75 @@ app.use(express.json());
 // PROTOCOLO DE REGISTRO (Alta de Agentes)
 // =========================================
 app.post('/api/registro', async (req, res) => {
-    const { username, email, password } = req.body;
-
-    try {
-        // 1. Verificación de integridad estructural: ¿Faltan datos?
-        if (!username || !email || !password) {
-            return res.status(400).json({ error: 'Faltan datos para completar el alta.' });
-        }
-
-        // 2. Blindaje de contraseña: Hash con Bcrypt
-        // Generamos un hash con un factor de coste de 10
-        const saltRounds = 10;
-        const passwordHash = await bcrypt.hash(password, saltRounds);
-
-        // 3. Inserción parametrizada anti-Inyección SQL
-        const query = 'INSERT INTO agentes (username, email, password_hash) VALUES (?, ?, ?)';
-        await pool.query(query, [username, email, passwordHash]);
-
-        console.log(`[+] Nuevo agente forjado: ${username}`);
-        res.status(201).json({ mensaje: 'Agente registrado con éxito. Protocolo de alta completado.' });
-
-    } catch (err) {
-        if (err.code === 'ER_DUP_ENTRY') {
-            return res.status(409).json({ error: 'El identificador o email ya están en uso por otro agente.' });
-        }
-        console.error('[-] Error en registro:', err);
-        res.status(500).json({ error: 'Error interno en la Fragua al procesar el alta.' });
+  const { username, email, password } = req.body;
+  try {
+    if (!username || !email || !password) {
+      return res.status(400).json({ error: 'Faltan datos para completar el alta.' });
     }
+
+    // Hash de Bcrypt con 10 salt rounds (Estable)
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+
+    // Modificamos la query para asignar dinámicamente rol_id = 1 (Triage Analyst L1) por defecto
+    const query = 'INSERT INTO agentes (username, email, password_hash, rol_id) VALUES (?, ?, ?, 1)';
+    await pool.query(query, [username, email, passwordHash]);
+
+    console.log(`[+] Nuevo agente de campo registrado: ${username} (Asignado L1 Triage)`);
+    res.status(201).json({ mensaje: 'Agente registrado con éxito. Asignado nivel de acceso L1 Triage.' });
+
+  } catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ error: 'El identificador o email ya están en uso.' });
+    }
+    console.error('[-] Error en registro:', err);
+    res.status(500).json({ error: 'Error interno en la Fragua al procesar el alta.' });
+  }
 });
 
 // =========================================
-// PROTOCOLO DE ACCESO (Identificación)
+// PROTOCOLO DE ACCESO (Identificación Optimizado para Roles SOC)
 // =========================================
 app.post('/api/login', async (req, res) => {
-    const { username, password } = req.body;
+  const { username, password } = req.body;
+  try {
+    // 1. Localizar al agente uniendo con su rol mediante INNER JOIN
+    const query = `
+      SELECT a.*, r.nombre AS rol_nombre, r.clearance_level 
+      FROM agentes a
+      INNER JOIN roles r ON a.rol_id = r.id
+      WHERE a.username = ?
+    `;
+    const [rows] = await pool.query(query, [username]);
 
-    try {
-        // 1. Localizar al agente
-        const [rows] = await pool.query('SELECT * FROM agentes WHERE username = ?', [username]);
-        
-        if (rows.length === 0) {
-            return res.status(401).json({ error: 'Identificación fallida. Credenciales no reconocidas.' });
-        }
-
-        const agente = rows[0];
-
-        // 2. Confrontación de claves (Password vs Hash)
-        const match = await bcrypt.compare(password, agente.password_hash);
-
-        if (!match) {
-            return res.status(401).json({ error: 'Identificación fallida. Credenciales no reconocidas.' });
-        }
-
-        // 3. Acceso concedido
-        console.log(`[!] Acceso autorizado para: ${username} (Nivel ${agente.clearance_level})`);
-        res.json({ 
-            mensaje: `Bienvenido de nuevo, agente ${username}.`,
-            user: { username: agente.username, level: agente.clearance_level }
-        });
-
-    } catch (err) {
-        console.error('[-] Error en login:', err);
-        res.status(500).json({ error: 'Error en el sistema de identificación.' });
+    if (rows.length === 0) {
+      return res.status(401).json({ error: 'Identificación fallida. Credenciales no reconocidas.' });
     }
-});
 
-app.listen(PORT, () => {
-    console.log(`\n=================================================`);
-    console.log(`[+] Núcleo de ReaperForge operativo en puerto ${PORT}`);
-    console.log(`[+] Rutas de /api/registro y /api/login armadas.`);
-    console.log(`=================================================\n`);
+    const agente = rows[0];
+
+    // 2. Confrontación de claves (Password vs Hash real Bcrypt)
+    const match = await bcrypt.compare(password, agente.password_hash);
+    if (!match) {
+      return res.status(401).json({ error: 'Identificación fallida. Credenciales no reconocidas.' });
+    }
+
+    // 3. Acceso concedido (Devolvemos tanto el nivel numérico como el nombre del Rol real)
+    console.log(`[!] Acceso autorizado para: ${username} (Rol: ${agente.rol_nombre} // Clearance Lvl: ${agente.clearance_level})`);
+    
+    res.json({
+      mensaje: `Bienvenido al centro de operaciones, agente ${username}.`,
+      user: {
+        username: agente.username,
+        level: agente.clearance_level, // Sigue mapeándose con data.user.level en tu auth.js
+        rol: agente.rol_nombre         // Nuevo campo para pintar el nombre técnico en tu perfil
+      }
+    });
+
+  } catch (err) {
+    console.error('[-] Error en login:', err);
+    res.status(500).json({ error: 'Error en el sistema de identificación.' });
+  }
 });
 
 // =================================================
