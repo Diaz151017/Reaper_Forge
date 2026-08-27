@@ -3,147 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ReaperForge: Laboratorio de Operaciones Especiales DFIR.">
+    <meta name="description" content="ReaperForge: Centro de Operaciones Especiales DFIR.">
     <meta name="author" content="[T] Adrián Díaz García">
-    <title>El Laboratorio - ReaperForge</title>
-
+    <title>Operations Command - ReaperForge</title>
+    <!-- Cargamos tu hoja de estilos táctica -->
     <link rel="stylesheet" href="css/estilos.css?v=2.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="cuerpo-consola">
 
-    <nav class="topbar-tactica">
-        <img src="img/Reaper_Forge_Menu.png" alt="Logo de ReaperForge" class="nav-logo">
-
-        <div class="nav-links">
-            <a href="index.html">Inicio</a>
-            <a href="herencia.html">Origen de la Fragua</a>
-            <a href="laboratorio.html" class="active">El Laboratorio</a>
-            <a href="expedientes.html">Expedientes</a>
+    <!-- BARRA SUPERIOR TÁCTICA -->
+    <header class="topbar-tactica">
+        <div class="topbar-left">
+            <span class="secure-node-badge">// SECURE NODE // ESTADO: EN LÍNEA</span>
+            <span class="slash-separator">/</span>
+            <span class="active-operation">OP: NEKROS</span>
         </div>
-
-        <div class="nav-auth">
-            <a href="registro.html" class="boton-acceso">Inicio de sesión/Alta de Agente</a>
+        <div class="topbar-center">
+            <nav class="nav-links">
+                <a href="laboratorio.html" class="active"><i class="fas fa-desktop"></i> COMMAND CENTER</a>
+                <a href="expedientes.html"><i class="fas fa-folder-open"></i> INCIDENT QUEUE</a>
+            </nav>
         </div>
-    </nav>
+        <div class="topbar-right">
+            <span class="utc-clock" id="utc-clock">UTC: --:--:--</span>
+            <div class="nav-auth" id="nav-auth-container">
+                <!-- Saneado dinámicamente por global.js -->
+            </div>
+        </div>
+    </header>
 
-    <main class="contenedor-consola">
-        <section class="hero-tactico">
-            <div class="consola-interfaz">
-                <div class="terminal-header">
-                    <span class="terminal-title">REAPERFORGE // SECTOR_01 // PANEL DE AGENTE</span>
+    <!-- CUADRO DE MANDOS CENTRAL (100vh sin scroll de ventana) -->
+    <main class="dashboard-grid">
+
+        <!-- COLUMNA IZQUIERDA: TELEMETRÍA Y CONTROL DE SISTEMA -->
+        <section class="panel-tactico panel-lateral-izq">
+            <div class="panel-header">
+                <span class="panel-titulo">// TELEMETRÍA Y NÚCLEO EXPRESS</span>
+                <span class="panel-status status-green">ONLINE</span>
+            </div>
+            <div class="panel-body">
+                <!-- Diagnóstico de constantes biométricas del Servidor -->
+                <div class="diag-container">
+                    <div class="barra-recurso">
+                        <div class="recurso-label"><span>CPU UTILIZATION</span><span id="cpu-pct">12%</span></div>
+                        <div class="recurso-track"><div class="recurso-fill fill-cyan" style="width: 12%"></div></div>
+                    </div>
+                    <div class="barra-recurso">
+                        <div class="recurso-label"><span>RAM ALLOCATION</span><span id="ram-pct">42%</span></div>
+                        <div class="recurso-track"><div class="recurso-fill fill-amber" style="width: 42%"></div></div>
+                    </div>
+                </div>
+
+                <div class="consola-diagnostico">
                     <div class="terminal-dots">
                         <span class="dot red"></span>
                         <span class="dot yellow"></span>
                         <span class="dot green"></span>
                     </div>
+                    <pre class="terminal-text" id="terminal-telemetria">
+[+] CARGANDO MÓDULOS DE RED...
+[+] PASARELA POOL: CONECTADA
+[+] CRIPTO-MÓDULO SHA-256: LISTO
+[+] MONITOR DE TRÁFICO ACTIVO
+[!] CARGA OPERACIONAL ESTABLE [T]
+                    </pre>
                 </div>
 
-                <div class="terminal-body">
-                    <h2>Bienvenido al Laboratorio, <span id="perfil-nombre" style="color: var(--color-cyan);">[IDENTIFICANDO...]</span></h2>
-                    <p class="subtitulo-tactico" style="margin-top: 5px; color: #64748b;">// Estado de la terminal: <span style="color: #00ff22; font-weight: bold;">EN LÍNEA</span></p>
-                    
-                    <div class="grid-perfil" style="display: flex; gap: 30px; margin-top: 25px; text-align: left;">
-                        
-                        <div class="tarjeta-info" style="background: var(--color-panel); border: 1px solid #222; padding: 20px; flex: 1; border-radius: 4px;">
-                            <h3 style="color: var(--color-cyan); margin-bottom: 15px;"><i class="fas fa-shield-alt"></i> Credenciales de Seguridad</h3>
-                            <p style="margin-bottom: 8px;">Firma Digital: <span id="info-id" style="color: var(--color-ash);">--</span></p>
-                            <p>Rango Operativo: <span id="info-clearance" style="color: #ff9100; font-weight: bold;">--</span></p>
-                        </div>
-                        
-                        <div class="tarjeta-info" style="background: var(--color-panel); border: 1px solid #222; padding: 20px; flex: 1; border-radius: 4px;">
-                            <h3 style="color: var(--color-cyan); margin-bottom: 15px;"><i class="fas fa-terminal"></i> Telemetría de la Fragua</h3>
-                            <pre style="background: #050505; color: #00ff22; padding: 12px; font-size: 0.85rem; border-radius: 4px; border: 1px solid #151515; font-family: var(--font-terminal);">
-[+] Núcleo Express: ESCUCHANDO
-[+] Pasarela Pool: CONECTADA
-[+] Cripto-Módulo: SEGURO
-                            </pre>
-                        </div>
+                <!-- Credenciales del Operador en sesión -->
+                <div class="tarjeta-agente-perfil">
+                    <div class="perfil-avatar">
+                        <i class="fas fa-user-shield"></i>
                     </div>
-                    <div class="tarjeta-info modulo-metricas">
-                        <h3><i class="fas fa-folder-open"></i> Registro de Operaciones (DFIR)</h3>
-    
-                    <div class="contenedor-contadores">
-                        <div class="contador-item">
-                            <span id="meta-purgados" class="numero-metrica purgado">0</span><br>
-                            <span class="etiqueta-metrica">AMENAZAS PURGADAS</span>
-                        </div>
-                        <div class="contador-item">
-                            <span id="meta-encurso" class="numero-metrica en-curso">0</span><br>
-                            <span class="etiqueta-metrica">INCIDENTES EN CURSO</span>
-                        </div>
-                        <div class="contador-item">
-                            <span id="meta-criticos" class="numero-metrica comprometido">0</span><br>
-                            <span class="etiqueta-metrica">SISTEMAS COMPROMETIDOS</span>
-                        </div>
+                    <div class="perfil-datos">
+                        <h4 id="perfil-nombre">CARGANDO...</h4>
+                        <span id="info-clearance" class="badge-clearance">TIER --</span>
+                        <p id="info-id" class="info-id">@agente_desconocido</p>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- COLUMNA CENTRAL: MATRIZ DE MÉTRICAS Y COLA DE ALERTAS CRÍTICAS -->
+        <section class="panel-tactico panel-central-metrics">
+            <div class="panel-header">
+                <span class="panel-titulo">// MATRIZ DE IMPACTO GLOBAL (DFIR)</span>
+                <span class="panel-status status-amber">ACTIVA</span>
+            </div>
+            <div class="panel-body-metrics">
+
+                <!-- CONTADORES CLÍNICOS CON DESTELLO DE NEÓN -->
+                <div class="contenedor-contadores">
+                    <div class="contador-item glow-green">
+                        <span id="meta-purgados" class="numero-metrica purgado">0</span>
+                        <span class="etiqueta-metrica">AMENAZAS PURGADAS</span>
+                    </div>
+                    <div class="contador-item glow-amber">
+                        <span id="meta-encurso" class="numero-metrica en-curso">0</span>
+                        <span class="etiqueta-metrica">INCIDENTES EN CURSO</span>
+                    </div>
+                    <div class="contador-item glow-red">
+                        <span id="meta-criticos" class="numero-metrica comprometido">0</span>
+                        <span class="etiqueta-metrica">HOSTS COMPROMETIDOS</span>
+                    </div>
+                </div>
+
+                <!-- SECTOR ALERT FEED (Último evento crítico registrado) -->
+                <div class="alert-feed-sector">
+                    <div class="sector-title">// ÚLTIMA ALERTA CRÍTICA REGISTRADA</div>
+                    <div class="tarjeta-alerta-critica">
+                        <div class="alerta-header">
+                            <span class="badge-alerta-critica"><i class="fas fa-exclamation-triangle"></i> COMPROMETIDO</span>
+                            <span class="alerta-timestamp">CASO NEKROS // HOST: CLÚSTER-FÍSICA</span>
+                        </div>
+                        <p class="alerta-desc">Exfiltración masiva de datos detectada en el puerto 443 del servidor de astrofísica mediante un script de persistencia ofuscado.</p>
+                        <div class="alerta-footer">
+                            <span>Nivel requerido: <strong>SECRET (Clearance L3)</strong></span>
+                            <a href="expedientes.html" class="boton-alerta-link">Acceder al Triage</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- COLUMNA DERECHA: INFRAESTRUCTURA CIENTÍFICA (UIB HOSTS MONITOR) -->
+        <section class="panel-tactico panel-lateral-der">
+            <div class="panel-header">
+                <span class="panel-titulo">// MONITOR DE HOSTS UIB</span>
+                <span class="panel-status status-blue">SCANNERS OK</span>
+            </div>
+            <div class="panel-body uib-hosts-container">
+                <p class="hosts-sub">Estado lógico del perímetro de servidores científicos vinculados:</p>
+
+                <div class="host-item">
+                    <div class="host-meta">
+                        <span class="host-name">Grid-Meteorología</span>
+                        <span class="host-ip">172.16.42.10</span>
+                    </div>
+                    <span class="status-badge secure">SECURE</span>
+                </div>
+
+                <div class="host-item host-attacked">
+                    <div class="host-meta">
+                        <span class="host-name">Clúster-Física-Relatividad</span>
+                        <span class="host-ip">172.16.42.11</span>
+                    </div>
+                    <span class="status-badge compromised">ATTACKED</span>
+                </div>
+
+                <div class="host-item">
+                    <div class="host-meta">
+                        <span class="host-name">Servidor-Biología-Marina</span>
+                        <span class="host-ip">172.16.42.12</span>
+                    </div>
+                    <span class="status-badge isolated">ISOLATED</span>
+                </div>
+
+                <div class="terminal-quick-actions">
+                    <div class="actions-header">// PROTOCOLO DE AISLAMIENTO GLOBAL</div>
+                    <p class="actions-desc">En caso de brecha incontrolable, se requiere autorización nivel L4 (SOC Lead) para ejecutar Network Containment masivo.</p>
+                    <button class="btn-contain-global" disabled><i class="fas fa-network-wired"></i> EJECUTAR PURGA DE RED</button>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <footer class="footer-tactico">
-        <div class="footer-container">
-            <div class="footer-logo">
-                <p>&copy; 2026 Desarrollado por <strong>Adrián Díaz García</strong>. <br> <span class="lema">// El código permanece [T]</span></p>
-            </div>
-            
-            <div class="footer-links">
-                <a href="#">Aviso Legal</a></li>
-                <a href="#">Política de Cookies</a></li>
-                <a href="#">Términos</a></li>
-                <a href="#">Protocolos de Seguridad</a>
-            </div>
-            
-            <div class="footer-social">
-                <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
-            </div>
-        </div>
-    </footer>
+    <!-- CONTROL DE RELOJ UTC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Reloj UTC dinámico
+            const clockEl = document.getElementById('utc-clock');
+            const updateClock = () => {
+                const now = new Date();
+                const utcStr = now.toISOString().substr(11, 8);
+                clockEl.textContent = `UTC: ${utcStr}`;
+            };
+            setInterval(updateClock, 1000);
+            updateClock();
+        });
+    </script>
+
+    <!-- SCRIPTS CORE DEL FRONTEND -->
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            
-            // ==========================================
-            // 1. TELEMETRÍA DFIR (Contadores)
-            // ==========================================
             const txtPurgados = document.getElementById('meta-purgados');
             const txtEnCurso = document.getElementById('meta-encurso');
             const txtCriticos = document.getElementById('meta-criticos');
 
+            // 1. OBTENCIÓN DE TELEMETRÍA DESDE TU API NODE.JS
             try {
-                // Petición a la API del servidor (Node)
                 const response = await fetch('http://localhost:3000/api/incidentes/estadisticas');
                 const stats = await response.json();
-
                 if (response.ok) {
-                    // Inyectamos los datos solo si las etiquetas existen
                     if (txtPurgados) txtPurgados.textContent = stats.purgados || 0;
                     if (txtEnCurso) txtEnCurso.textContent = stats.enCurso || 0;
                     if (txtCriticos) txtCriticos.textContent = stats.comprometidos || 0;
                 }
             } catch (err) {
-                console.error('[-] Error al sincronizar la telemetría:', err);
-                const alertas = [txtPurgados, txtEnCurso, txtCriticos];
-                alertas.forEach(el => { if(el) { el.textContent = '??'; el.style.color = '#ff3d3d'; }});
+                console.error('[-] Error de telemetría:', err);
+                const items = [txtPurgados, txtEnCurso, txtCriticos];
+                items.forEach(el => { if (el) el.textContent = '??'; });
             }
 
-            // ==========================================
-            // 2. IDENTIFICACIÓN DE AGENTE (Perfil)
-            // ==========================================
+            // 2. RECUPERACIÓN DE SESIÓN REAL PARA EL PERFIL DEL OPERADOR
             const sesionGuardada = localStorage.getItem('agente_sesion');
             if (sesionGuardada) {
                 const agente = JSON.parse(sesionGuardada);
-                // Extraemos el nivel de clearance (sea del objeto agente o de la variable aislada)
-                const clearance = agente.level || localStorage.getItem('agente_level') || 1;
-                
-                // Inyectamos los datos en la interfaz
+
+                // Mapeo dinámico del nivel de autorización
                 document.getElementById('perfil-nombre').textContent = agente.username;
                 document.getElementById('info-id').textContent = `@${agente.username.toLowerCase()}`;
-                // Si en el almacenamiento está guardado el rol de la respuesta del login, lo inyectamos directamente
-                document.getElementById('info-clearance').textContent = agente.rol || `Nivel ${clearance}`;
+
+                // Si el backend envió el rol amigable (ej: Chief Information Security Officer), lo usamos
+                const cargo = agente.rol || `Nivel ${agente.level || 1}`;
+                document.getElementById('info-clearance').textContent = cargo;
+
+                // Si el clearance es superior (L4 o L5), habilitamos el botón de pánico de aislamiento global
+                const clearanceNum = parseInt(agente.level) || 1;
+                if (clearanceNum >= 4) {
+                    const btnContain = document.querySelector('.btn-contain-global');
+                    if (btnContain) {
+                        btnContain.removeAttribute('disabled');
+                        btnContain.classList.add('btn-contain-active');
+                    }
+                }
             }
         });
     </script>

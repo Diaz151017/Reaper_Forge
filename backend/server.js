@@ -58,10 +58,10 @@ app.post('/api/login', async (req, res) => {
     const [rows] = await pool.query(query, [username]);
 
     if (rows.length === 0) {
-      return res.status(401).json({ error: 'Identificación fallida. Credenciales no reconocidas.' });
+     return res.status(401).json({ error: 'Identificación fallida. Credenciales no reconocidas.' });
     }
 
-    const agente = rows[0];
+    const agente = rows[0]; // <--- Extrae el primer agente encontrado
 
     // 2. Confrontación de claves (Password vs Hash real Bcrypt)
     const match = await bcrypt.compare(password, agente.password_hash);
