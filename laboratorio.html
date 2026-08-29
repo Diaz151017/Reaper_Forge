@@ -194,7 +194,7 @@
 
             // 1. OBTENCIÓN DE TELEMETRÍA DESDE TU API NODE.JS
             try {
-                const response = await fetch('http://localhost:3000/api/incidentes/estadisticas');
+                const response = await fetch('http://127.0.0.1:3000/api/incidentes/estadisticas');
                 const stats = await response.json();
                 if (response.ok) {
                     if (txtPurgados) txtPurgados.textContent = stats.purgados || 0;

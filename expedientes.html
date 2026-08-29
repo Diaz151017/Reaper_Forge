@@ -79,7 +79,7 @@
             visor.innerHTML = '<p style="color: var(--color-cyan); font-family: var(--font-terminal);">[+] Estableciendo conexión segura...</p>';
 
             try {
-                const respuesta = await fetch('http://localhost:3000/api/incidentes'); 
+                const respuesta = await fetch('http://127.0.0.1:3000/api/incidentes'); 
                 const incidentes = await respuesta.json();
 
                 visor.innerHTML = '';

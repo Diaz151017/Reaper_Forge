@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const pool = require('./db'); // Importamos el pool de arriba
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000; //Forzado a puerto 3000 para evitar conflictos con otros servicios
 
 // Middlewares: Filtros obligatorios de interceptación
 app.use(cors());
@@ -151,4 +151,12 @@ app.put('/api/incidentes/:id/purgar', async (req, res) => {
         console.error('[-] Error al ejecutar el veredicto en la base de datos:', error);
         res.status(500).json({ error: 'Fallo crítico en el sistema de actualización.' });
     }
+});
+
+// Forzamos a que Express escuche estrictamente en IPv4 (127.0.0.1)
+app.listen(PORT, '127.0.0.1', () => {
+    console.log(`\n=================================================`);
+    console.log(`[+] Núcleo de ReaperForge operativo en http://127.0.0.1:${PORT}`);
+    console.log(`[+] Rutas de /api/registro y /api/login armadas.`);
+    console.log(`=================================================\n`);
 });

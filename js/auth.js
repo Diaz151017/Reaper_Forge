@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
 
     // La coordenada de tu servidor backend local
-    const API_URL = 'http://localhost:3000/api';
+    const API_URL = 'http://127.0.0.1:3000/api';
 
     // =========================================
     // PROTOCOLO DE ALTA (Registro)
