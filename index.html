@@ -46,17 +46,20 @@
                 <span class="motto">// DIGITAL FORENSICS FRONTIER</span>
                 <br>
             <div class="formulario-tactico-box">
-                <form id="login-form-gateway" class="form-acceso-rapido">
+                <!-- El ID ahora coincide exactamente con el 'login-form' que busca js/auth.js -->
+                <form id="login-form" class="form-acceso-rapido"> 
                     <div class="input-grupo">
-                        <label for="reg-username"><i class="fas fa-fingerprint"></i> IDENTIFICADOR DEL AGENTE</label>
-                        <input type="text" id="reg-username" placeholder="Ej: Agente_001" required autocomplete="off">
+                        <label for="login-username"><i class="fas fa-fingerprint"></i> IDENTIFICADOR DEL AGENTE</label>
+                        <!-- ID corregido a 'login-username' -->
+                        <input type="text" id="login-username" placeholder="Ej: Agente_001" required autocomplete="off"> 
                     </div>
                     <div class="input-grupo">
-                        <label for="reg-password"><i class="fas fa-lock"></i> CLAVE DE ACCESO CRIPTOGRÁFICA</label>
-                        <input type="password" id="reg-password" placeholder="••••••••••••" required>
+                        <label for="login-password"><i class="fas fa-lock"></i> CLAVE DE ACCESO CRIPTOGRÁFICA</label>
+                        <!-- ID corregido a 'login-password' -->
+                        <input type="password" id="login-password" placeholder="••••••••••••" required> 
                     </div>
                     <button type="submit" class="boton-portal-brillante">
-                        ACCEDER AL ÁREA DE TRIAGE
+                        ACCEDER AL ÁREA DE TRIAGE [T]
                     </button>
                 </form>
             </div>
@@ -89,33 +92,29 @@
     </footer>
 
     <!-- Lógica local de tiempo de terminal y envío asíncrono -->
-     <script>
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const timeEl = document.getElementById('system-time');
-        
             const updateClock = () => {
                 const now = new Date();
-            
-                // Forzamos el formato en inglés que tenías originalmente
                 const dias = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                 const meses = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            
                 const diaSemana = dias[now.getDay()];
                 const dia = String(now.getDate()).padStart(2, '0');
                 const mes = meses[now.getMonth()];
                 const anio = now.getFullYear();
-            
                 const horas = String(now.getHours()).padStart(2, '0');
                 const minutos = String(now.getMinutes()).padStart(2, '0');
                 const segundos = String(now.getSeconds()).padStart(2, '0');
-            
-                // Ensamblamos la cadena con tu hora local real
                 timeEl.textContent = `SYS_TIME: ${diaSemana}, ${dia} ${mes} ${anio} ${horas}:${minutos}:${segundos} CEST`;
             };
-        
             setInterval(updateClock, 1000);
             updateClock();
         });
     </script>
+
+    <!-- CONECTORES CRUCIALES DE LA FRAGUA -->
+    <script src="js/auth.js"></script>
+    <script src="js/global.js"></script>
 </body>
 </html>
