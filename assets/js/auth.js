@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('agente_level', clearance);
     
                     // Forzamos el salto hiperespacial al Laboratorio
-                    window.location.href = 'laboratorio.html'; 
+                    window.location.href = '/modulos operativos/laboratorio.html'; 
                 } else {
                     alert(`[-] ACCESO DENEGADO: ${data.error}`);
                 }
