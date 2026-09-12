@@ -39,12 +39,29 @@
             </div>
         </section>
 
-        <!-- PANEL DERECHO: FORMULARIO DE ACCESO Y LOGO -->
+        <!-- PANEL DERECHO: FORMULARIO DE REGISTRO,ACCESO Y LOGO -->
         <section class="panel-login-derecho">
             <img src="assets/img/Reaper_Forge_Menu.png" alt="ReaperForge Logo" class="logo-central">
                 <h1>REAPERFORGE</h1>
                 <span class="motto">// DIGITAL FORENSICS FRONTIER</span>
-                <br>
+            <div class="formulario-tactico-box">
+                <!-- El ID ahora coincide exactamente con el 'login-form' que busca js/auth.js -->
+                <form id="login-form" class="form-acceso-rapido"> 
+                    <div class="input-grupo">
+                        <label for="login-username"> <i class="fas fa-fingerprint"></i> IDENTIFICADOR DEL AGENTE</label>
+                        <!-- ID corregido a 'login-username' -->
+                        <input type="text" id="login-username" placeholder="Ej: Agente_001" required autocomplete="off"> 
+                    </div>
+                    <div class="input-grupo">
+                        <label for="login-password"><i class="fas fa-lock"></i> CLAVE DE ACCESO CRIPTOGRÁFICA</label>
+                        <!-- ID corregido a 'login-password' -->
+                        <input type="password" id="login-password" placeholder="••••••••••••" required> 
+                    </div>
+                    <button type="submit" class="boton-portal-brillante">
+                        REGISTRARSE
+                    </button>
+                </form>
+            </div>
             <div class="formulario-tactico-box">
                 <!-- El ID ahora coincide exactamente con el 'login-form' que busca js/auth.js -->
                 <form id="login-form" class="form-acceso-rapido"> 
